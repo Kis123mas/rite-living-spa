@@ -1,0 +1,134 @@
+{% extends 'auth/maindash.html' %}
+{% load static %}
+
+{% block content %}
+<div class="main">
+    {% include 'auth/nav.html' %}
+    <main class="content px-4 py-3" style="max-height: 90vh; overflow-y: auto;">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2>Record Expenses</h2>
+            <button type="button" class="btn btn-brand" data-bs-toggle="modal" data-bs-target="#serviceListModal">
+                <i class="fa fa-list pe-1"></i> View Expenses
+            </button>
+        </div>
+
+        <!-- Display any form errors -->
+        {% if form.errors %}
+        <div class="alert alert-danger">
+            <strong>There are some errors in the form. Please correct them.</strong>
+        </div>
+        {% endif %}
+
+        <!-- Expense Form -->
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <form method="POST">
+                    {% csrf_token %}
+                    {{ form.as_p }} <!-- Render the form as paragraphs for simplicity -->
+                    <button type="submit" class="btn btn-primary">Save Expense</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Modal for View Expenses -->
+        <div class="modal fade" id="serviceListModal" tabindex="-1" aria-labelledby="serviceListModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="serviceListModalLabel">Recorded Expenses</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Filter by Month and Year -->
+                        <form id="expense-filter-form">
+                            <div class="row mb-3">
+                                <div class="col">
+                                    <label for="month">Month</label>
+                                    <select name="month" id="month" class="form-select">
+                                        {% for i in months %}
+                                            <option value="{{ forloop.counter }}" {% if forloop.counter == month %}selected{% endif %}>
+                                                {{ i }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col">
+                                    <label for="year">Year</label>
+                                    <select name="year" id="year" class="form-select">
+                                        <option value="2023" {% if year == 2023 %}selected{% endif %}>2023</option>
+                                        <option value="2024" {% if year == 2024 %}selected{% endif %}>2024</option>
+                                        <option value="2025" {% if year == 2025 %}selected{% endif %}>2025</option>
+                                    </select>
+                                </div>
+                                <div class="col">
+                                    <button type="button" id="filter-btn" class="btn btn-primary mt-4">Filter</button>
+                                </div>
+                            </div>
+                        </form>
+
+                        <!-- Table with Expenses -->
+                        <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+                            <table class="table" id="expense-table">
+                                <thead>
+                                    <tr>
+                                        <th>Amount</th>
+                                        <th>Description</th>
+                                        <th>Category</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Content will be dynamically inserted here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </main>
+</div>
+
+{% block scripts %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    // On filter button click, perform AJAX request
+    $('#filter-btn').on('click', function() {
+        var month = $('#month').val();
+        var year = $('#year').val();
+
+        // Make an AJAX request to fetch filtered expenses
+        $.ajax({
+            url: '{% url "recordexpensespage" %}',  // Replace with your URL to handle this request
+            method: 'GET',
+            data: {
+                'month': month,
+                'year': year
+            },
+            success: function(response) {
+                // Update the table with the filtered expenses
+                var tableBody = $('#expense-table tbody');
+                tableBody.empty();  // Clear existing data
+
+                if (response.expenses.length === 0) {
+                    tableBody.append('<tr><td colspan="4" class="text-center">No expenses recorded for this filter.</td></tr>');
+                } else {
+                    response.expenses.forEach(function(expense) {
+                        tableBody.append('<tr>' +
+                            '<td>' + expense.amount + '</td>' +
+                            '<td>' + expense.description + '</td>' +
+                            '<td>' + expense.category + '</td>' +
+                            '<td>' + expense.date + '</td>' +
+                        '</tr>');
+                    });
+                }
+            },
+            error: function(xhr, status, error) {
+                console.log("Error: " + error);
+            }
+        });
+    });
+</script>
+{% endblock %}
+{% endblock %}

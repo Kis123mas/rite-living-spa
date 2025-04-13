@@ -1,0 +1,52 @@
+{% extends 'auth/maindash.html' %}
+{% load static %}
+
+{% block content %}
+<div class="main">
+    {% include 'auth/nav.html' %}
+    <main class="content px-3 py-2">
+        <h2 class="text-center fw-bold mb-4">Customer Review</h2>
+        
+        <!-- Review Form -->
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <form>
+                    <!-- Name -->
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Full Name</label>
+                        <input type="text" class="form-control" id="name" placeholder="Enter your name" required>
+                    </div>
+
+                    <!-- Rating -->
+                    <div class="mb-3">
+                        <label for="rating" class="form-label">Rating</label>
+                        <div class="d-flex justify-content-start">
+                            <input type="radio" class="btn-check" name="rating" id="rating1" autocomplete="off">
+                            <label class="btn btn-outline-warning" for="rating1">1</label>
+                            <input type="radio" class="btn-check" name="rating" id="rating2" autocomplete="off">
+                            <label class="btn btn-outline-warning" for="rating2">2</label>
+                            <input type="radio" class="btn-check" name="rating" id="rating3" autocomplete="off">
+                            <label class="btn btn-outline-warning" for="rating3">3</label>
+                            <input type="radio" class="btn-check" name="rating" id="rating4" autocomplete="off">
+                            <label class="btn btn-outline-warning" for="rating4">4</label>
+                            <input type="radio" class="btn-check" name="rating" id="rating5" autocomplete="off">
+                            <label class="btn btn-outline-warning" for="rating5">5</label>
+                        </div>
+                    </div>
+
+                    <!-- Review Message -->
+                    <div class="mb-3">
+                        <label for="reviewMessage" class="form-label">Your Review</label>
+                        <textarea class="form-control" id="reviewMessage" rows="3" placeholder="Write your review here..." required></textarea>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-brand">Submit Review</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+</div>
+{% endblock %}

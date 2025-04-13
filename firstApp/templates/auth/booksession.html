@@ -1,0 +1,73 @@
+{% extends 'auth/maindash.html' %}
+{% load static %}
+
+{% block content %}
+<div class="main">
+    {% include 'auth/nav.html' %}
+
+    <main class="content px-3 py-2">
+        <h2 class="text-center fw-bold mb-4">Book a Spa Session</h2>
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+
+                <!-- Scrollable Form Container -->
+                <div style="max-height: 450px; overflow-y: auto; padding-right: 10px;" class="border rounded p-3 shadow-sm">
+                    <form>
+                        <div class="mb-3">
+                            <label for="fullName" class="form-label">Full Name</label>
+                            <input type="text" class="form-control" id="fullName" placeholder="Enter your full name">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email address</label>
+                            <input type="email" class="form-control" id="email" placeholder="Enter your email">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="service" class="form-label">Session type</label>
+                            <select class="form-select" id="service">
+                                <option selected disabled>Choose type</option>
+                                <option value="massage">Contract</option>
+                                <option value="facial">Solo</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="service" class="form-label">Service Type</label>
+                            <select class="form-select" id="service">
+                                <option selected disabled>Choose a service</option>
+                                <option value="massage">Relaxing Massage</option>
+                                <option value="facial">Rejuvenating Facial</option>
+                                <option value="aromatic">Aromatic Oil Therapy</option>
+                                <option value="bath">Lavender Bath Soak</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="date" class="form-label">Preferred Date</label>
+                            <input type="date" class="form-control" id="date">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="time" class="form-label">Preferred Time</label>
+                            <input type="time" class="form-control" id="time">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="message" class="form-label">Additional Message</label>
+                            <textarea class="form-control" id="message" rows="3" placeholder="Tell us anything special you need..."></textarea>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-brand">Book Session</button>
+                        </div>
+                    </form>
+                </div>
+                <!-- End Scrollable Form -->
+            </div>
+        </div>
+
+        
+    </main>
+</div>
+{% endblock %}

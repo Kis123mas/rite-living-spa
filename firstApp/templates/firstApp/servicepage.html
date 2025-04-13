@@ -1,0 +1,94 @@
+{% extends 'firstApp/main.html' %}
+{% load static %}
+
+{% block title %}services - rite living spa{% endblock %}
+
+{% block content %}
+
+<!-- SERVICES HEADER -->
+<section class="section-padding text-center bg-light" data-aos="fade-down" data-aos-delay="50">
+    <div class="container">
+        <h1 class="mb-3">Our Services</h1>
+        <p class="text-muted">Relax, refresh, and rejuvenate with our wide range of spa treatments tailored for your wellness.</p>
+    </div>
+</section>
+
+<!-- SERVICES GRID -->
+<section class="section-padding bg-white" data-aos="fade-down" data-aos-delay="50">
+    <div class="container">
+        <div class="row g-4">
+            <!-- Service 1 -->
+            <div class="col-md-4">
+                <div class="card h-100 text-center shadow-sm border-0 hover-zoom">
+                    <img src="{% static 'firstApp/images/heropicture.jpg' %}" class="card-img-top" alt="Massage Therapy">
+                    <div class="card-body">
+                        <h5 class="card-title">Massage Therapy</h5>
+                        <p class="card-text text-muted">Alleviate stress and muscle tension with our full-body, deep tissue, and Swedish massages.</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Service 2 -->
+            <div class="col-md-4">
+                <div class="card h-100 text-center shadow-sm border-0 hover-zoom">
+                    <img src="{% static 'firstApp/images/heropicture.jpg' %}" class="card-img-top" alt="Facial Treatments">
+                    <div class="card-body">
+                        <h5 class="card-title">Facial Treatments</h5>
+                        <p class="card-text text-muted">Enjoy radiant skin with our hydrating, anti-aging, and deep-cleansing facials.</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Service 3 -->
+            <div class="col-md-4">
+                <div class="card h-100 text-center shadow-sm border-0 hover-zoom">
+                    <img src="{% static 'firstApp/images/heropicture.jpg' %}" class="card-img-top" alt="Aromatherapy">
+                    <div class="card-body">
+                        <h5 class="card-title">Aromatherapy</h5>
+                        <p class="card-text text-muted">Calm your mind and body with essential oil therapy for emotional and physical well-being.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Service 4 -->
+            <div class="col-md-4">
+                <div class="card h-100 text-center shadow-sm border-0 hover-zoom">
+                    <img src="{% static 'firstApp/images/heropicture.jpg' %}" class="card-img-top" alt="Body Scrubs">
+                    <div class="card-body">
+                        <h5 class="card-title">Body Scrubs</h5>
+                        <p class="card-text text-muted">Exfoliate your skin with natural ingredients for a silky-smooth, glowing finish.</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Service 5 -->
+            <div class="col-md-4">
+                <div class="card h-100 text-center shadow-sm border-0 hover-zoom">
+                    <img src="{% static 'firstApp/images/heropicture.jpg' %}" class="card-img-top" alt="Steam & Sauna">
+                    <div class="card-body">
+                        <h5 class="card-title">Steam & Sauna</h5>
+                        <p class="card-text text-muted">Detoxify and improve circulation with our premium steam and sauna experiences.</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Service 6 -->
+            <div class="col-md-4">
+                <div class="card h-100 text-center shadow-sm border-0 hover-zoom">
+                    <img src="{% static 'firstApp/images/heropicture.jpg' %}" class="card-img-top" alt="Nail Care">
+                    <div class="card-body">
+                        <h5 class="card-title">Nail Care</h5>
+                        <p class="card-text text-muted">Pamper your hands and feet with our luxurious manicures and pedicures.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="section-padding text-center bg-success text-white" data-aos="fade-down" data-aos-delay="50">
+    <div class="container">
+        <h2 class="mb-3">Experience Luxury Today</h2>
+        <p class="mb-4">Your journey to relaxation and wellness starts here. Book your favorite service now!</p>
+        <a href="#" class="btn btn-light btn-lg rounded-pill">Book an Appointment</a>
+    </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,108 @@
+{% extends 'firstApp/main.html' %}
+{% load static %}
+
+{% block title %}product - rite living spa{% endblock %}
+
+{% block content %}
+
+<!-- PRODUCTS HEADER -->
+<section class="section-padding text-center bg-light" data-aos="fade-down" data-aos-delay="50">
+    <div class="container">
+        <h1 class="mb-3">Our Products</h1>
+        <p class="text-muted">Pamper yourself with our carefully curated range of spa essentials, available for purchase.</p>
+    </div>
+</section>
+
+<!-- PRODUCTS GRID -->
+<section class="section-padding bg-white" data-aos="fade-down" data-aos-delay="50">
+    <div class="container">
+        <div class="row g-4">
+            <!-- Product 1 -->
+            <div class="col-md-4">
+                <div class="card h-100 text-center shadow-sm border-0 hover-zoom">
+                    <img src="{% static 'firstApp/images/heropicture.jpg' %}" class="card-img-top" alt="Aromatherapy Body Oil">
+                    <div class="card-body">
+                        <h5 class="card-title">Aromatherapy Body Oil</h5>
+                        <p class="card-text text-muted">Nourish and hydrate your skin with natural essential oils.</p>
+                        <h6 class="text-success">₦7,500</h6>
+                        <a href="#" class="btn btn-outline-success btn-sm mt-2">Buy Now</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Product 2 -->
+            <div class="col-md-4">
+                <div class="card h-100 text-center shadow-sm border-0 hover-zoom">
+                    <img src="{% static 'firstApp/images/heropicture.jpg' %}" class="card-img-top" alt="Facial Cleanser">
+                    <div class="card-body">
+                        <h5 class="card-title">Herbal Facial Cleanser</h5>
+                        <p class="card-text text-muted">Gentle cleanser for daily use, suitable for all skin types.</p>
+                        <h6 class="text-success">₦5,200</h6>
+                        <a href="#" class="btn btn-outline-success btn-sm mt-2">Buy Now</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Product 3 -->
+            <div class="col-md-4">
+                <div class="card h-100 text-center shadow-sm border-0 hover-zoom">
+                    <img src="{% static 'firstApp/images/heropicture.jpg' %}" class="card-img-top" alt="Body Scrub">
+                    <div class="card-body">
+                        <h5 class="card-title">Exfoliating Body Scrub</h5>
+                        <p class="card-text text-muted">Remove dead skin cells and reveal glowing skin.</p>
+                        <h6 class="text-success">₦6,000</h6>
+                        <a href="#" class="btn btn-outline-success btn-sm mt-2">Buy Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product 4 -->
+            <div class="col-md-4">
+                <div class="card h-100 text-center shadow-sm border-0 hover-zoom">
+                    <img src="{% static 'firstApp/images/heropicture.jpg' %}" class="card-img-top" alt="Scented Candles">
+                    <div class="card-body">
+                        <h5 class="card-title">Scented Candles</h5>
+                        <p class="card-text text-muted">Infuse your space with calming spa-inspired aromas.</p>
+                        <h6 class="text-success">₦3,800</h6>
+                        <a href="#" class="btn btn-outline-success btn-sm mt-2">Buy Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product 5 -->
+            <div class="col-md-4">
+                <div class="card h-100 text-center shadow-sm border-0 hover-zoom">
+                    <img src="{% static 'firstApp/images/heropicture.jpg' %}" class="card-img-top" alt="Luxury Spa Robe">
+                    <div class="card-body">
+                        <h5 class="card-title">Luxury Spa Robe</h5>
+                        <p class="card-text text-muted">Feel like royalty in our ultra-soft cotton spa robe.</p>
+                        <h6 class="text-success">₦11,000</h6>
+                        <a href="#" class="btn btn-outline-success btn-sm mt-2">Buy Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product 6 -->
+            <div class="col-md-4">
+                <div class="card h-100 text-center shadow-sm border-0 hover-zoom">
+                    <img src="{% static 'firstApp/images/heropicture.jpg' %}" class="card-img-top" alt="Spa Gift Kit">
+                    <div class="card-body">
+                        <h5 class="card-title">Complete Spa Gift Kit</h5>
+                        <p class="card-text text-muted">The perfect gift: includes oils, scrubs, and a candle.</p>
+                        <h6 class="text-success">₦18,500</h6>
+                        <a href="#" class="btn btn-outline-success btn-sm mt-2">Buy Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="section-padding text-center bg-success text-white" data-aos="fade-down" data-aos-delay="50">
+    <div class="container">
+        <h2 class="mb-3">Bring the Spa Home</h2>
+        <p class="mb-4">Order your favorite spa products and enjoy the same relaxing experience at home.</p>
+        <a href="#" class="btn btn-light btn-lg rounded-pill">Shop All Products</a>
+    </div>
+</section>
+
+{% endblock %}

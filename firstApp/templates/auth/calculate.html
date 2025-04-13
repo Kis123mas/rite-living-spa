@@ -1,0 +1,348 @@
+{% extends 'auth/maindash.html' %}
+{% load static %}
+
+{% block content %}
+<div class="main">
+    {% include 'auth/nav.html' %}
+    <main class="content px-4 py-3" style="max-height: 90vh; overflow-y: auto;">
+        <div class="mb-4">
+            <h2>Calculation Page</h2>
+            <p class="text-muted">Manage and view your schedule in one place.</p>
+        </div>
+
+
+        <!-- Filter Form -->
+        <form method="GET" class="row g-3 mb-3">
+            <div class="col-md-4">
+                <label for="month" class="form-label">Select Month</label>
+                <select class="form-select" id="month" name="month">
+                    <option value="1">January</option>
+                    <option value="2">February</option>
+                    <option value="3">March</option>
+                    <option value="4" selected>April</option>
+                    <option value="5">May</option>
+                    <option value="6">June</option>
+                    <option value="7">July</option>
+                    <option value="8">August</option>
+                    <option value="9">September</option>
+                    <option value="10">October</option>
+                    <option value="11">November</option>
+                    <option value="12">December</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label for="year" class="form-label">Select Year</label>
+                <select class="form-select" id="year" name="year">
+                    <option value="2023">2023</option>
+                    <option value="2024" selected>2024</option>
+                    <option value="2025">2025</option>
+                </select>
+            </div>
+            <div class="col-md-4 d-flex align-items-end">
+                <button type="submit" class="btn btn-primary w-100">View Records</button>
+            </div>
+        </form>
+
+        <!-- Staff Jobs Table -->
+        <div class="table-responsive" style="max-height: 200px; overflow-y: auto;">
+            <table class="table table-bordered table-striped">
+                <thead class="table-dark sticky-top">
+                    <tr>
+                        <th>Staff Name</th>
+                        <th>Jobs Done ({{ month_name }})</th>
+                        <th>View Jobs</th>
+                        <th>Calculate Payout</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for staff in staff_jobs %}
+                    <tr>
+                        <td>{{ staff.staff_name__first_name }} {{ staff.staff_name__last_name }}</td>
+                        <td>{{ staff.jobs_done }}</td>
+                        <td>
+                            <button class="btn btn-sm btn-primary view-jobs-btn"
+                                data-staff-id="{{ staff.staff_name__id }}"
+                                data-staff-name="{{ staff.staff_name__first_name }} {{ staff.staff_name__last_name }}">View
+                                Jobs
+                            </button>
+                        </td>
+                        <td><button class="btn btn-sm btn-success">Calculate Payout</button></td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center">No records found for this period.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+
+        <!-- Payment Summary Table -->
+        <div class="mt-4">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h4 class="mb-0">Total Payments - {{ month_name }} {{ year }}</h4>
+                <!-- Total Records Icon -->
+                <li class="nav-item list-unstyled me-2 position-relative">
+                    <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#allJobsModal">
+                        <i class="fa-solid fa-list fs-5"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">
+                            {{ all_jobs.count }}
+                            <span class="visually-hidden">total records</span>
+                        </span>
+                    </a>
+                </li>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Payment Method</th>
+                            <th>Total Amount (₦)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Cash</td>
+                            <td>₦{{ payment_summary.cash|floatformat:2 }}</td>
+                        </tr>
+                        <tr>
+                            <td>POS</td>
+                            <td>₦{{ payment_summary.pos|floatformat:2 }}</td>
+                        </tr>
+                        <tr>
+                            <td>Transfer</td>
+                            <td>₦{{ payment_summary.transfer|floatformat:2 }}</td>
+                        </tr>
+                        <tr class="table-secondary">
+                            <th>Total</th>
+                            <th>₦{{payment_summary.cash|add:payment_summary.pos|add:payment_summary.transfer|floatformat:2}}</th>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+    </main>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="jobsModal" tabindex="-1" aria-labelledby="jobsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Jobs for <span id="staffName"></span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <!-- SCROLLABLE MODAL BODY -->
+            <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Date</th>
+                                <th>Service</th>
+                                <th>Type</th>
+                                <th>Amount (₦)</th>
+                                <th>Payment Mode</th>
+                                <th>Customer</th>
+                                <th>Description</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="jobList">
+                            <!-- Jobs will go here -->
+                        </tbody>
+                        <tfoot>
+                            <tr class="table-secondary">
+                                <th colspan="3">Total</th>
+                                <th colspan="5" id="totalAmount">₦0.00</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- All Jobs Modal -->
+<div class="modal fade" id="allJobsModal" tabindex="-1" aria-labelledby="allJobsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header d-flex justify-content-between align-items-center w-100">
+                <h5 class="modal-title mb-0">All Jobs - {{ month_name }} {{ year }}</h5>
+                <div>
+                    <button class="btn btn-sm btn-outline-danger me-2" onclick="downloadJobsPDF()">
+                        <i class="fa-solid fa-download"></i>
+                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive" style="max-height: 500px; overflow-y: auto;">
+                    <table class="table table-bordered table-striped">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Date</th>
+                                <th>Staff</th>
+                                <th>Service</th>
+                                <th>Type</th>
+                                <th>Amount (₦)</th>
+                                <th>Payment Mode</th>
+                                <th>Customer</th>
+                                <th>Description</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for job in all_jobs %}
+                            <tr>
+                                <td>{{ job.service_date }}</td>
+                                <td>{{ job.staff_name.first_name }}</td>
+                                <td>{{ job.service_rendered }}</td>
+                                <td>{{ job.service_type }}</td>
+                                <td>₦{{ job.amount|floatformat:2 }}</td>
+                                <td>{{ job.mode_of_payment }}</td>
+                                <td>{{ job.customer_name }}</td>
+                                <td>{{ job.description }}</td>
+                                <td>{{ job.payment_status }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                        <tfoot>
+                            <tr class="table-secondary">
+                                <th colspan="4">Total Amount</th>
+                                <th colspan="5">₦{{ total_amount|floatformat:2 }}</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Payout Calculation Modal -->
+<div class="modal fade" id="payoutModal" tabindex="-1" aria-labelledby="payoutModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="payoutModalLabel">Calculate Payout for <span id="payoutStaffName"></span>
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="payoutForm">
+                    <div class="mb-3">
+                        <label for="totalAmount" class="form-label">Total Amount (₦)</label>
+                        <input type="text" id="totalAmountInput" class="form-control" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="percentage" class="form-label">Percentage (%)</label>
+                        <input type="number" id="percentageInput" class="form-control" placeholder="Enter percentage"
+                            min="0" max="100">
+                    </div>
+                    <div class="mb-3">
+                        <label for="calculatedPayout" class="form-label">Calculated Payout (₦)</label>
+                        <input type="text" id="calculatedPayout" class="form-control" readonly>
+                    </div>
+                    <button type="button" class="btn btn-primary" id="calculatePayoutBtn">Calculate</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const modal = new bootstrap.Modal(document.getElementById('jobsModal'));
+        const jobList = document.getElementById('jobList');
+        const staffName = document.getElementById('staffName');
+        const totalAmount = document.getElementById('totalAmount');
+
+        document.querySelectorAll('.view-jobs-btn').forEach(button => {
+            button.addEventListener('click', function () {
+                const staffId = this.dataset.staffId;
+                const name = this.dataset.staffName;
+                staffName.textContent = name;
+                jobList.innerHTML = `<tr><td colspan="8">Loading...</td></tr>`;
+                totalAmount.textContent = '';
+
+                fetch(`/get-staff-jobs/${staffId}/?month={{ month }}&year={{ year }}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        jobList.innerHTML = '';
+
+                        if (data.jobs.length === 0) {
+                            jobList.innerHTML = `<tr><td colspan="8">No jobs found.</td></tr>`;
+                        } else {
+                            data.jobs.forEach(job => {
+                                const row = document.createElement('tr');
+                                row.innerHTML = `
+                    <td>${job.service_date}</td>
+                    <td>${job.service_rendered}</td>
+                    <td>${job.service_type}</td>
+                    <td>₦${parseFloat(job.amount).toFixed(2)}</td>
+                    <td>${job.mode_of_payment}</td>
+                    <td>${job.customer_name || '-'}</td>
+                    <td>${job.description || '-'}</td>
+                    <td>${job.payment_status}</td>
+                  `;
+                                jobList.appendChild(row);
+                            });
+                        }
+
+                        totalAmount.textContent = `₦${data.total_amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
+                        modal.show();
+                    });
+            });
+        });
+    });
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const payoutModal = new bootstrap.Modal(document.getElementById('payoutModal'));
+        const payoutStaffName = document.getElementById('payoutStaffName');
+        const totalAmountInput = document.getElementById('totalAmountInput');
+        const percentageInput = document.getElementById('percentageInput');
+        const calculatedPayout = document.getElementById('calculatedPayout');
+
+        document.querySelectorAll('.btn-success').forEach(button => {
+            button.addEventListener('click', function () {
+                const staffId = this.closest('tr').querySelector('.view-jobs-btn').dataset.staffId;
+                const name = this.closest('tr').querySelector('.view-jobs-btn').dataset.staffName;
+                payoutStaffName.textContent = name;
+
+                fetch(`/get-staff-jobs/${staffId}/?month={{ month }}&year={{ year }}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const totalAmount = data.total_amount;
+                        totalAmountInput.value = `₦${totalAmount.toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
+
+                        // Event listener to calculate payout
+                        document.getElementById('calculatePayoutBtn').addEventListener('click', function () {
+                            const percentage = parseFloat(percentageInput.value);
+                            if (isNaN(percentage) || percentage < 0 || percentage > 100) {
+                                alert('Please enter a valid percentage between 0 and 100.');
+                                return;
+                            }
+                            const payout = (totalAmount * (percentage / 100)).toFixed(2);
+                            calculatedPayout.value = `₦${payout}`;
+                        });
+
+                        payoutModal.show();
+                    });
+            });
+        });
+    });
+</script>
+
+
+{% endblock %}

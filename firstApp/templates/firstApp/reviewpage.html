@@ -1,0 +1,114 @@
+{% extends 'firstApp/main.html' %}
+{% load static %}
+
+{% block title %}review - rite living spa{% endblock %}
+
+{% block content %}
+
+<!-- REVIEWS HEADER -->
+<section class="section-padding text-center bg-light" data-aos="fade-down" data-aos-delay="50">
+    <div class="container">
+        <h1 class="mb-3">What Our Clients Say</h1>
+        <p class="text-muted">Real experiences. Real results. Discover why clients love Rite Living Spa.</p>
+    </div>
+</section>
+
+<!-- REVIEWS SECTION -->
+<section class="section-padding bg-white" data-aos="fade-down" data-aos-delay="50">
+    <div class="container">
+        <div class="row g-4">
+            <!-- Review 1 -->
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body text-center">
+                        <img class="rounded-circle img-circle" src="{% static 'firstApp/images/heropicture.jpg' %}" alt="">
+                        <h5 class="card-title">Amara O.</h5>
+                        <p class="text-muted small">"Absolutely the best spa experience I’ve ever had! The staff are professional and the ambiance is so calming."</p>
+                        <div class="text-warning mb-2">
+                            ★★★★★
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Review 2 -->
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body text-center">
+                        <img class="rounded-circle img-circle" src="{% static 'firstApp/images/heropicture.jpg' %}" alt="">
+                        <h5 class="card-title">Chioma D.</h5>
+                        <p class="text-muted small">"I bought their body oil and it’s divine! The massage services are top-notch. I felt brand new."</p>
+                        <div class="text-warning mb-2">
+                            ★★★★★
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Review 3 -->
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body text-center">
+                        <img class="rounded-circle img-circle" src="{% static 'firstApp/images/heropicture.jpg' %}" alt="">
+                        <h5 class="card-title">James E.</h5>
+                        <p class="text-muted small">"Clean, serene, and very welcoming. I highly recommend their full body treatment package!"</p>
+                        <div class="text-warning mb-2">
+                            ★★★★★
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Review 4 -->
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body text-center">
+                        <img class="rounded-circle img-circle" src="{% static 'firstApp/images/heropicture.jpg' %}" alt="">
+                        <h5 class="card-title">Sarah B.</h5>
+                        <p class="text-muted small">"Their facial treatments transformed my skin. Such great care and attention to detail!"</p>
+                        <div class="text-warning mb-2">
+                            ★★★★★
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Review 5 -->
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body text-center">
+                        <img class="rounded-circle img-circle" src="{% static 'firstApp/images/heropicture.jpg' %}" alt="">
+                        <h5 class="card-title">Tunde A.</h5>
+                        <p class="text-muted small">"Relaxing environment and quality products. I’m definitely coming back for more sessions."</p>
+                        <div class="text-warning mb-2">
+                            ★★★★☆
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Review 6 -->
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body text-center">
+                        <img class="rounded-circle img-circle" src="{% static 'firstApp/images/heropicture.jpg' %}" alt="">
+                        <h5 class="card-title">Ngozi N.</h5>
+                        <p class="text-muted small">"They treat you like royalty. From the waiting area to the final service, everything is excellent."</p>
+                        <div class="text-warning mb-2">
+                            ★★★★★
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="section-padding text-center bg-success text-white" data-aos="fade-down" data-aos-delay="50">
+    <div class="container">
+        <h2 class="mb-3">Have You Visited Us?</h2>
+        <p class="mb-4">We’d love to hear your feedback. Share your experience and help others find their moment of peace.</p>
+        <a href="#" class="btn btn-light btn-lg rounded-pill">Submit Your Review</a>
+    </div>
+</section>
+
+{% endblock %}

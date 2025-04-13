@@ -1,0 +1,94 @@
+{% extends 'firstApp/main.html' %}
+{% load static %}
+
+{% block title %}about us - rite living spa{% endblock %}
+
+{% block content %}
+<!-- ABOUT HEADER -->
+<section class="section-padding text-center bg-light" data-aos="fade-down" data-aos-delay="50">
+    <div class="container">
+        <h1 class="mb-3">About Us</h1>
+        <p class="text-muted">Relax, refresh, and rejuvenate with our wide range of spa treatments tailored for your wellness.</p>
+    </div>
+</section>
+
+
+<!-- ABOUT SECTION -->
+<section class="section-padding bg-white" data-aos="fade-down" data-aos-delay="50">
+    <div class="container">
+        <div class="row align-items-center mb-5">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <img src="{% static 'firstApp/images/heropicture.jpg' %}" class="img-fluid rounded shadow" alt="Spa Relaxation">
+            </div>
+            <div class="col-lg-6">
+                <h2 class="mb-4">Welcome to Rite Living Spa</h2>
+                <p class="text-muted">At Rite Living Spa, we blend modern wellness techniques with time-tested traditions to provide a sanctuary for mind, body, and soul. Our serene environment and highly trained professionals are here to help you unwind and rejuvenate.</p>
+                <ul class="list-unstyled mt-4">
+                    <li><i class="bi bi-check-circle-fill text-success me-2"></i> Experienced Therapists</li>
+                    <li><i class="bi bi-check-circle-fill text-success me-2"></i> Natural & Organic Products</li>
+                    <li><i class="bi bi-check-circle-fill text-success me-2"></i> Personalized Treatments</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="row align-items-center">
+            <div class="col-lg-6 order-lg-2 mb-4 mb-lg-0">
+                <img src="{% static 'firstApp/images/heropicture.jpg' %}" class="img-fluid rounded shadow" alt="Massage Therapy">
+            </div>
+            <div class="col-lg-6 order-lg-1">
+                <h3 class="mb-3">Our Mission</h3>
+                <p class="text-muted">Our mission is to promote holistic well-being by providing exceptional spa services in a tranquil and luxurious setting. We are committed to enhancing your health, beauty, and relaxation through a wide variety of treatments tailored to your needs.</p>
+                <h5 class="mt-4">Core Values</h5>
+                <p class="text-muted mb-1">✔️ Customer-Centered Care</p>
+                <p class="text-muted mb-1">✔️ Excellence in Service</p>
+                <p class="text-muted mb-1">✔️ Harmony & Balance</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SERVICES SECTION -->
+<section class="section-padding bg-light text-center" data-aos="fade-down" data-aos-delay="50">
+    <div class="container">
+        <h2 class="mb-5">What We Offer</h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm border-0 hover-zoom">
+                    <img src="{% static 'firstApp/images/heropicture.jpg' %}" class="card-img-top" alt="Massage">
+                    <div class="card-body">
+                        <h5 class="card-title">Massage Therapy</h5>
+                        <p class="card-text text-muted">Relieve stress and muscle tension with our range of full-body massages.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm border-0 hover-zoom">
+                    <img src="{% static 'firstApp/images/heropicture.jpg' %}" class="card-img-top" alt="Facial">
+                    <div class="card-body">
+                        <h5 class="card-title">Facials & Skin Care</h5>
+                        <p class="card-text text-muted">Nourish your skin with custom facials using premium organic products.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm border-0 hover-zoom">
+                    <img src="{% static 'firstApp/images/heropicture.jpg' %}" class="card-img-top" alt="Aromatherapy">
+                    <div class="card-body">
+                        <h5 class="card-title">Aromatherapy</h5>
+                        <p class="card-text text-muted">Indulge in calming aromas that soothe your senses and elevate your mood.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CALL TO ACTION -->
+<section class="section-padding bg-success text-white text-center" data-aos="fade-down" data-aos-delay="50">
+    <div class="container">
+        <h2 class="mb-3">Ready to Treat Yourself?</h2>
+        <p class="mb-4">Book your appointment now and experience the transformation.</p>
+        <a href="#" class="btn btn-light btn-lg rounded-pill">Book Now</a>
+    </div>
+</section>
+{% endblock %}

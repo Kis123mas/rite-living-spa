@@ -1,0 +1,82 @@
+{% extends 'auth/maindash.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="main">
+    {% include 'auth/nav.html' %}
+
+    <main class="content px-3 py-2">
+        <h2 class="text-center mb-4 fw-bold">Spa Product Store</h2>
+
+        <!-- Search Bar -->
+        <div class="row mb-4">
+            <div class="col-md-6 offset-md-3">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search spa products...">
+                    <button class="btn btn-brand" type="button">
+                        <i class="fa-solid fa-magnifying-glass"></i> Search
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Product Cards -->
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+            <!-- Product 1 -->
+            <div class="col">
+                <div class="card h-100 shadow-sm" style="font-size: 0.9rem;">
+                    <img src="{% static 'firstApp/images/heropicture.jpg' %}" class="card-img-top" alt="Spa Oil" style="height: 150px; object-fit: cover;">
+                    <div class="card-body p-2">
+                        <h6 class="card-title fw-semibold mb-2">Aromatic Spa Oil</h6>
+                        <p class="card-text mb-2">Relax with our premium aromatic oils perfect for massage therapy.</p>
+                        <p class="text-primary fw-bold mb-2">$19.99</p>
+                        <a href="#" class="btn btn-sm btn-brand w-100">BUY</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product 2 -->
+            <div class="col">
+                <div class="card h-100 shadow-sm" style="font-size: 0.9rem;">
+                    <img src="{% static 'firstApp/images/heropicture.jpg' %}" class="card-img-top" alt="Facial Cream" style="height: 150px; object-fit: cover;">
+                    <div class="card-body p-2">
+                        <h6 class="card-title fw-semibold mb-2">Rejuvenating Facial Cream</h6>
+                        <p class="card-text mb-2">Give your skin the glow it deserves with our organic facial cream.</p>
+                        <p class="text-primary fw-bold mb-2">$29.99</p>
+                        <a href="#" class="btn btn-sm btn-brand w-100">BUY</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product 3 -->
+            <div class="col">
+                <div class="card h-100 shadow-sm" style="font-size: 0.9rem;">
+                    <img src="{% static 'firstApp/images/heropicture.jpg' %}" class="card-img-top" alt="Bath Salt" style="height: 150px; object-fit: cover;">
+                    <div class="card-body p-2">
+                        <h6 class="card-title fw-semibold mb-2">Lavender Bath Salt</h6>
+                        <p class="card-text mb-2">Soothe your muscles and mind with our calming lavender bath salts.</p>
+                        <p class="text-primary fw-bold mb-2">$14.99</p>
+                        <a href="#" class="btn btn-sm btn-brand w-100">BUY</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pagination (Static) -->
+        <div class="d-flex justify-content-center mt-4">
+            <nav>
+                <ul class="pagination pagination-sm">
+                    <li class="page-item disabled"><span class="page-link">Previous</span></li>
+                    <li class="page-item active"><span class="page-link">1</span></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                </ul>
+            </nav>
+           
+        </div>
+    </main>
+</div>
+
+{% endblock %}
