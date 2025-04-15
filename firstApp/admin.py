@@ -89,14 +89,14 @@ class ExpenseAdmin(admin.ModelAdmin):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'uploaded_file', 'price', 'created_at')
+    list_display = ('id', 'name', 'price', 'uploaded_file', 'created_at')
     search_fields = ('name',)
     list_filter = ('created_at',)
     ordering = ('-created_at',)
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('id', 'client', 'product', 'status', 'created_at')
+    list_display = ('id', 'client', 'product', 'uploaded_file', 'status', 'created_at')
     search_fields = ('client__first_name', 'client__last_name', 'product__name')
     list_filter = ('status', 'created_at')
     ordering = ('-created_at',)
@@ -110,3 +110,45 @@ class MessageAdmin(admin.ModelAdmin):
     ordering = ('-sent_at',)
 
 
+@admin.register(Review)
+class ReviewAdmin(admin.ModelAdmin):
+    
+    list_display = ('name', 'rating', 'created_at')
+    search_fields = ('name', 'message')
+    list_filter = ('rating', 'created_at')
+
+
+
+@admin.register(SpaSessionBooking)
+class SpaSessionBookingAdmin(admin.ModelAdmin):
+    list_display = (
+        'user',
+        'session_type',
+        'service_type',
+        'preferred_date',
+        'preferred_time',
+        'status',
+        'created_at',
+    )
+    list_filter = ('session_type', 'service_type', 'status', 'preferred_date', 'created_at')
+    search_fields = ('user__username', 'user__email', 'message')
+    ordering = ('-created_at',)
+    readonly_fields = ('created_at',)
+
+    fieldsets = (
+        ('User Info', {
+            'fields': ('user',)
+        }),
+        ('Session Details', {
+            'fields': (
+                'session_type',
+                'service_type',
+                'preferred_date',
+                'preferred_time',
+                'message'
+            )
+        }),
+        ('Status & Metadata', {
+            'fields': ('status', 'created_at')
+        }),
+    )

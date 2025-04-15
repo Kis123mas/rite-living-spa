@@ -2,49 +2,96 @@
 {% load static %}
 
 {% block content %}
+<style>
+    .star-rating {
+        direction: rtl;
+        display: flex;
+        justify-content: flex-start;
+        gap: 0.5rem;
+    }
+
+    .star-rating input[type="radio"] {
+        display: none;
+    }
+
+    .star-rating label {
+        font-size: 2rem;
+        color: #ddd;
+        cursor: pointer;
+        transition: color 0.3s ease;
+    }
+
+    .star-rating input[type="radio"]:checked ~ label,
+    .star-rating label:hover,
+    .star-rating label:hover ~ label {
+        color: #ffc107;
+    }
+
+    .btn-brand {
+        background-color: #673ab7;
+        color: #fff;
+        border: none;
+    }
+
+    .btn-brand:hover {
+        background-color: #5e35b1;
+    }
+
+    .form-control:focus {
+        border-color: #673ab7;
+        box-shadow: 0 0 0 0.2rem rgba(103, 58, 183, 0.25);
+    }
+
+    h2.review-heading {
+        font-weight: 700;
+        color: #343a40;
+        margin-bottom: 2rem;
+    }
+</style>
+
 <div class="main">
     {% include 'auth/nav.html' %}
-    <main class="content px-3 py-2">
-        <h2 class="text-center fw-bold mb-4">Customer Review</h2>
-        
-        <!-- Review Form -->
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <form>
-                    <!-- Name -->
-                    <div class="mb-3">
-                        <label for="name" class="form-label">Full Name</label>
-                        <input type="text" class="form-control" id="name" placeholder="Enter your name" required>
-                    </div>
+    <main class="content px-3 py-4">
+        <div class="container">
+            <h2 class="text-center review-heading">Leave a Review ✍️</h2>
 
-                    <!-- Rating -->
-                    <div class="mb-3">
-                        <label for="rating" class="form-label">Rating</label>
-                        <div class="d-flex justify-content-start">
-                            <input type="radio" class="btn-check" name="rating" id="rating1" autocomplete="off">
-                            <label class="btn btn-outline-warning" for="rating1">1</label>
-                            <input type="radio" class="btn-check" name="rating" id="rating2" autocomplete="off">
-                            <label class="btn btn-outline-warning" for="rating2">2</label>
-                            <input type="radio" class="btn-check" name="rating" id="rating3" autocomplete="off">
-                            <label class="btn btn-outline-warning" for="rating3">3</label>
-                            <input type="radio" class="btn-check" name="rating" id="rating4" autocomplete="off">
-                            <label class="btn btn-outline-warning" for="rating4">4</label>
-                            <input type="radio" class="btn-check" name="rating" id="rating5" autocomplete="off">
-                            <label class="btn btn-outline-warning" for="rating5">5</label>
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <form method="POST" novalidate>
+                        {% csrf_token %}
+
+                        <!-- Name -->
+                        <div class="mb-4">
+                            <label for="id_name" class="form-label fw-semibold">Your Full Name</label>
+                            {{ form.name }}
                         </div>
-                    </div>
 
-                    <!-- Review Message -->
-                    <div class="mb-3">
-                        <label for="reviewMessage" class="form-label">Your Review</label>
-                        <textarea class="form-control" id="reviewMessage" rows="3" placeholder="Write your review here..." required></textarea>
-                    </div>
+                        <!-- Rating -->
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold d-block">Your Rating</label>
+                            <div class="star-rating">
+                                {% for i in "54321" %}
+                                    <input type="radio" name="rating" id="star{{ i }}" value="{{ i }}" {% if form.rating.value|stringformat:"s" == i %}checked{% endif %}>
+                                    <label for="star{{ i }}">&#9733;</label>
+                                {% endfor %}
+                            </div>
+                            {% if form.rating.errors %}
+                                <div class="text-danger small mt-1">{{ form.rating.errors.0 }}</div>
+                            {% endif %}
+                        </div>
 
-                    <!-- Submit Button -->
-                    <div class="d-grid">
-                        <button type="submit" class="btn btn-brand">Submit Review</button>
-                    </div>
-                </form>
+                        <!-- Review Message -->
+                        <div class="mb-4">
+                            <label for="id_message" class="form-label fw-semibold">Your Feedback</label>
+                            {{ form.message }}
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-brand btn-lg">Submit Review</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </main>

@@ -4,16 +4,19 @@
 {% block content %}
 <div class="main">
     {% include 'auth/nav.html' %}
-
+    
     
     <!-- <main class="content px-4 py-3"> -->
     <main class="content px-4 py-3" style="max-height: 90vh; overflow-y: auto;">
+        {% if request.user.is_secretary or request.user.is_not_secretary or request.user.is_superuser %}
         <div class="mb-4">
             <h2>Dashboard</h2>
             <p class="text-muted">Manage and view your schedule in one place.</p>
         </div>
+        {% endif %}
 
-        {% if user.is_secretary or user.is_admin %}
+        <!-- for secretary only -->
+        {% if user.is_secretary %}
         <div class="container-fluid py-1">  <!-- Reduced the padding even more -->
             <div class="container">
                 
@@ -66,8 +69,94 @@
         
             </div>
         </div>
-        
-        
+        {% endif %}
+
+
+        <!-- for staffs only -->
+        {% if user.is_not_secretary %}
+
+        {% endif %}
+
+
+        {% if not request.user.is_secretary and not request.user.is_not_secretary and not request.user.is_superuser %}
+
+        <div class="container my-3">
+            <!-- Welcome Section -->
+            <div class="text-center mb-5">
+                <h2 class="fw-bold animate-fade-in">Welcome to Rite Living Spa 🌺</h2>
+                <p class="lead text-muted animate-fade-in-slow">
+                    Relax, rejuvenate, and shine. Let’s pamper you with our best products and spa treatments.
+                </p>
+            </div>
+
+            <!-- Action Cards: Shop & Book -->
+            <div class="row g-4 justify-content-center">
+                <!-- Shop Now Card -->
+                <div class="col-md-5">
+                    <div class="card border-0 shadow-lg animate-slide-up h-100">
+                        <div class="card-body text-center p-4">
+                            <img src="{%static 'firstApp/images/logo.png' %}" alt="Shop" class="img-fluid mb-3" style="max-height: 160px;">
+                            <h5 class="fw-semibold">Shop Spa Products</h5>
+                            <p class="text-muted">Browse our curated collection of spa and skincare products made just for you.</p>
+                            <a href="#" class="btn btn-brand mt-2">Go to Store</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Book Session Card -->
+                <div class="col-md-5">
+                    <div class="card border-0 shadow-lg animate-slide-up h-100">
+                        <div class="card-body text-center p-4">
+                            <img src="{% static 'img/spa-booking.png' %}" alt="Book Session" class="img-fluid mb-3" style="max-height: 160px;">
+                            <h5 class="fw-semibold">Book a Spa Session</h5>
+                            <p class="text-muted">Choose a date and time that works for you, and we’ll handle the rest.</p>
+                            <a href="#" class="btn btn-success mt-2">Book Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Animations -->
+        <style>
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(-10px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+
+            @keyframes slideUp {
+                from { opacity: 0; transform: translateY(30px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+
+            .animate-fade-in {
+                animation: fadeIn 1s ease-in-out forwards;
+            }
+
+            .animate-fade-in-slow {
+                animation: fadeIn 2s ease-in-out forwards;
+            }
+
+            .animate-slide-up {
+                animation: slideUp 1.5s ease-in-out forwards;
+            }
+
+            .btn-brand {
+                background-color: #c084fc;
+                color: white;
+            }
+
+            .btn-brand:hover {
+                background-color: #a855f7;
+                color: white;
+            }
+        </style>
+        {% endif %}
+
+
+
+        {% if user.is_admin %}
+
         {% endif %}
     </main>
 

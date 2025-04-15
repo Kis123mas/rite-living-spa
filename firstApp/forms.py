@@ -173,7 +173,7 @@ class UserProfileForm(forms.ModelForm):
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
-        fields = ['name', 'description', 'price', 'uploaded_file']
+        fields = ['name', 'description', 'price']
 
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter product name'}),
@@ -188,3 +188,40 @@ class ProductForm(forms.ModelForm):
             field.required = False  # Allow partial updates
 
 
+class ReviewForm(forms.ModelForm):
+    class Meta:
+        model = Review
+        fields = ['name', 'rating', 'message']
+        widgets = {
+            'name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter your name'
+            }),
+            'rating': forms.RadioSelect(choices=Review.RATING_CHOICES),
+            'message': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 3,
+                'placeholder': 'Write your review here...'
+            }),
+        }
+
+
+
+class SpaSessionBookingForm(forms.ModelForm):
+    class Meta:
+        model = SpaSessionBooking
+        fields = ['session_type', 'service_type', 'preferred_date', 'preferred_time', 'message']
+
+        widgets = {
+            'session_type': forms.Select(attrs={'class': 'form-select'}),
+            'service_type': forms.Select(attrs={'class': 'form-select'}),
+            'preferred_date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'preferred_time': forms.TimeInput(attrs={'class': 'form-control', 'type': 'time'}),
+            'message': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Tell us anything special you need...', 'rows': 3}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(SpaSessionBookingForm, self).__init__(*args, **kwargs)
+        for field in self.fields.values():
+            if not isinstance(field.widget, forms.Select):
+                field.widget.attrs['class'] = 'form-control'

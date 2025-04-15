@@ -184,8 +184,8 @@ class Expense(models.Model):
 class Product(models.Model):
     name = models.CharField(max_length=255, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
-    price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     uploaded_file = models.FileField(upload_to='uploads/orders/', blank=True, null=True)
+    price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -201,6 +201,7 @@ class Order(models.Model):
 
     client = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='orders', blank=True, null=True)
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='orders', blank=True, null=True)
+    uploaded_file = models.FileField(upload_to='uploads/orders/', blank=True, null=True)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -215,4 +216,63 @@ class Message(models.Model):
     sent_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Message from {self.sender.username} on Order #{self.order.id}"
+        return f"Message from {self.sender.first_name} on Order #{self.order.id}"
+
+
+class Review(models.Model):
+    RATING_CHOICES = [
+        (1, '1 Star'),
+        (2, '2 Stars'),
+        (3, '3 Stars'),
+        (4, '4 Stars'),
+        (5, '5 Stars'),
+    ]
+
+    user = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, blank=True)
+    name = models.CharField(max_length=255)
+    rating = models.IntegerField(choices=RATING_CHOICES)
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.name} - {self.rating} Star(s)"
+
+
+class SpaSessionBooking(models.Model):
+    SESSION_TYPE_CHOICES = [
+        ('contract', 'Contract'),
+        ('solo', 'Solo'),
+    ]
+
+    SERVICE_TYPE_CHOICES = [
+        ('massage', 'Relaxing Massage'),
+        ('facial', 'Rejuvenating Facial'),
+        ('aromatic', 'Aromatic Oil Therapy'),
+        ('bath', 'Lavender Bath Soak'),
+    ]
+
+    STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('approved', 'Approved'),
+        ('declined', 'Declined'),
+    ]
+
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='spa_bookings')
+    session_type = models.CharField(max_length=10, choices=SESSION_TYPE_CHOICES, null=True, blank=True)
+    service_type = models.CharField(max_length=20, choices=SERVICE_TYPE_CHOICES, null=True, blank=True)
+    preferred_date = models.DateField(null=True, blank=True)
+    preferred_time = models.TimeField(null=True, blank=True)
+    message = models.TextField(null=True, blank=True)
+    status = models.CharField(
+        max_length=10,
+        choices=STATUS_CHOICES,
+        default='pending',
+        null=True,
+        blank=True
+    )
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.service_type} ({self.status})"
+

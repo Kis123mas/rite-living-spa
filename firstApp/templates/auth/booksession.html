@@ -5,69 +5,94 @@
 <div class="main">
     {% include 'auth/nav.html' %}
 
-    <main class="content px-3 py-2">
+    <main class="content px-3 py-2" style="max-height: 90vh; overflow-y: auto;">
         <h2 class="text-center fw-bold mb-4">Book a Spa Session</h2>
         <div class="row justify-content-center">
             <div class="col-md-12">
 
                 <!-- Scrollable Form Container -->
-                <div style="max-height: 450px; overflow-y: auto; padding-right: 10px;" class="border rounded p-3 shadow-sm">
-                    <form>
+                <div style="padding-right: 10px;" class="border rounded p-3 shadow-sm">
+                    <form method="POST" novalidate>
+                        {% csrf_token %}
+                        {{ form.non_field_errors }}
+
                         <div class="mb-3">
-                            <label for="fullName" class="form-label">Full Name</label>
-                            <input type="text" class="form-control" id="fullName" placeholder="Enter your full name">
+                            <label class="form-label">Session Type</label>
+                            {{ form.session_type }}
                         </div>
 
                         <div class="mb-3">
-                            <label for="email" class="form-label">Email address</label>
-                            <input type="email" class="form-control" id="email" placeholder="Enter your email">
+                            <label class="form-label">Service Type</label>
+                            {{ form.service_type }}
                         </div>
 
                         <div class="mb-3">
-                            <label for="service" class="form-label">Session type</label>
-                            <select class="form-select" id="service">
-                                <option selected disabled>Choose type</option>
-                                <option value="massage">Contract</option>
-                                <option value="facial">Solo</option>
-                            </select>
+                            <label class="form-label">Preferred Date</label>
+                            {{ form.preferred_date }}
                         </div>
 
                         <div class="mb-3">
-                            <label for="service" class="form-label">Service Type</label>
-                            <select class="form-select" id="service">
-                                <option selected disabled>Choose a service</option>
-                                <option value="massage">Relaxing Massage</option>
-                                <option value="facial">Rejuvenating Facial</option>
-                                <option value="aromatic">Aromatic Oil Therapy</option>
-                                <option value="bath">Lavender Bath Soak</option>
-                            </select>
+                            <label class="form-label">Preferred Time</label>
+                            {{ form.preferred_time }}
                         </div>
 
                         <div class="mb-3">
-                            <label for="date" class="form-label">Preferred Date</label>
-                            <input type="date" class="form-control" id="date">
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="time" class="form-label">Preferred Time</label>
-                            <input type="time" class="form-control" id="time">
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="message" class="form-label">Additional Message</label>
-                            <textarea class="form-control" id="message" rows="3" placeholder="Tell us anything special you need..."></textarea>
+                            <label class="form-label">Additional Message</label>
+                            {{ form.message }}
                         </div>
 
                         <div class="d-grid">
                             <button type="submit" class="btn btn-brand">Book Session</button>
                         </div>
                     </form>
+
+                    <hr class="my-4">
+
+                    <h4 class="text-center mb-3">Your Booked Sessions</h4>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Session Type</th>
+                                    <th>Service Type</th>
+                                    <th>Preferred Date</th>
+                                    <th>Preferred Time</th>
+                                    <th>Status</th>
+                                    <th>Booked On</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for booking in bookings %}
+                                <tr>
+                                    <td>{{ booking.get_session_type_display }}</td>
+                                    <td>{{ booking.get_service_type_display }}</td>
+                                    <td>{{ booking.preferred_date }}</td>
+                                    <td>{{ booking.preferred_time }}</td>
+                                    <td>
+                                        {% if booking.status == 'approved' %}
+                                        <span class="badge bg-success">Approved</span>
+                                        {% elif booking.status == 'declined' %}
+                                        <span class="badge bg-danger">Declined</span>
+                                        {% else %}
+                                        <span class="badge bg-secondary">Pending</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ booking.created_at|date:"M d, Y H:i" }}</td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="6" class="text-center">You have not booked any sessions yet.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
                 </div>
-                <!-- End Scrollable Form -->
             </div>
         </div>
 
-        
+
     </main>
 </div>
 {% endblock %}

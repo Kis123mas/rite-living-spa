@@ -26,6 +26,9 @@
 
     <link rel="stylesheet" type="text/css" href="{% static 'firstApp/css/dashboard.css' %}">
 
+
+    <meta name="csrf-token" content="{{ csrf_token }}">
+
 </head>
 
 <body>
@@ -44,104 +47,115 @@
                         <span class="ms-2">RITE LIVING SPA</span>
                     </a>
                 </div>
-        
+
                 <ul class="nav flex-column sidebar-nav d-flex flex-column gap-3">
                     {% with current=request.resolver_match.url_name %}
-        
+
                     <li class="nav-item">
                         <a href="{% url 'dashboardpage' %}"
-                           class="nav-link py-3 px-4 rounded-3 {% if current == 'dashboardpage' %}bg-light text-dark{% endif %}"
-                           onmouseover="this.classList.add('bg-light', 'text-dark')"
-                           onmouseout="if (this.getAttribute('data-active') !== 'true') this.classList.remove('bg-light', 'text-dark')"
-                           data-active="{% if current == 'dashboardpage' %}true{% else %}false{% endif %}">
+                            class="nav-link py-3 px-4 rounded-3 {% if current == 'dashboardpage' %}bg-light text-dark{% endif %}"
+                            onmouseover="this.classList.add('bg-light', 'text-dark')"
+                            onmouseout="if (this.getAttribute('data-active') !== 'true') this.classList.remove('bg-light', 'text-dark')"
+                            data-active="{% if current == 'dashboardpage' %}true{% else %}false{% endif %}">
                             <i class="fa-solid fa-list pe-2"></i> Dashboard
                         </a>
                     </li>
-        
+
+                    <!-- client user nav -->
                     {% if not user.is_secretary and not user.is_not_secretary and not user.is_admin %}
                     <li class="nav-item">
                         <a href="{% url 'storepage' %}"
-                           class="nav-link py-3 px-4 rounded-3 {% if current == 'storepage' %}bg-light text-dark{% endif %}"
-                           onmouseover="this.classList.add('bg-light', 'text-dark')"
-                           onmouseout="if (this.getAttribute('data-active') !== 'true') this.classList.remove('bg-light', 'text-dark')"
-                           data-active="{% if current == 'storepage' %}true{% else %}false{% endif %}">
+                            class="nav-link py-3 px-4 rounded-3 {% if current == 'storepage' %}bg-light text-dark{% endif %}"
+                            onmouseover="this.classList.add('bg-light', 'text-dark')"
+                            onmouseout="if (this.getAttribute('data-active') !== 'true') this.classList.remove('bg-light', 'text-dark')"
+                            data-active="{% if current == 'storepage' %}true{% else %}false{% endif %}">
                             <i class="fa-solid fa-store pe-2"></i> Store
                         </a>
                     </li>
                     <li class="nav-item">
                         <a href="{% url 'booksessionpage' %}"
-                           class="nav-link py-3 px-4 rounded-3 {% if current == 'booksessionpage' %}bg-light text-dark{% endif %}"
-                           onmouseover="this.classList.add('bg-light', 'text-dark')"
-                           onmouseout="if (this.getAttribute('data-active') !== 'true') this.classList.remove('bg-light', 'text-dark')"
-                           data-active="{% if current == 'booksessionpage' %}true{% else %}false{% endif %}">
+                            class="nav-link py-3 px-4 rounded-3 {% if current == 'booksessionpage' %}bg-light text-dark{% endif %}"
+                            onmouseover="this.classList.add('bg-light', 'text-dark')"
+                            onmouseout="if (this.getAttribute('data-active') !== 'true') this.classList.remove('bg-light', 'text-dark')"
+                            data-active="{% if current == 'booksessionpage' %}true{% else %}false{% endif %}">
                             <i class="fa-solid fa-calendar pe-2"></i> Book Session
                         </a>
                     </li>
                     <li class="nav-item">
                         <a href="{% url 'userreviewpage' %}"
-                           class="nav-link py-3 px-4 rounded-3 {% if current == 'userreviewpage' %}bg-light text-dark{% endif %}"
-                           onmouseover="this.classList.add('bg-light', 'text-dark')"
-                           onmouseout="if (this.getAttribute('data-active') !== 'true') this.classList.remove('bg-light', 'text-dark')"
-                           data-active="{% if current == 'userreviewpage' %}true{% else %}false{% endif %}">
+                            class="nav-link py-3 px-4 rounded-3 {% if current == 'userreviewpage' %}bg-light text-dark{% endif %}"
+                            onmouseover="this.classList.add('bg-light', 'text-dark')"
+                            onmouseout="if (this.getAttribute('data-active') !== 'true') this.classList.remove('bg-light', 'text-dark')"
+                            data-active="{% if current == 'userreviewpage' %}true{% else %}false{% endif %}">
                             <i class="fa-solid fa-star pe-2"></i> Review
                         </a>
                     </li>
                     {% endif %}
-        
-                    {% if user.is_secretary or user.is_admin %}
+
+                    <!-- secretary nav -->
+                    {% if user.is_secretary %}
                     <li class="nav-item">
                         <a href="{% url 'recordservicepage' %}"
-                           class="nav-link py-3 px-4 rounded-3 {% if current == 'recordservicepage' %}bg-light text-dark{% endif %}"
-                           onmouseover="this.classList.add('bg-light', 'text-dark')"
-                           onmouseout="if (this.getAttribute('data-active') !== 'true') this.classList.remove('bg-light', 'text-dark')"
-                           data-active="{% if current == 'recordservicepage' %}true{% else %}false{% endif %}">
+                            class="nav-link py-3 px-4 rounded-3 {% if current == 'recordservicepage' %}bg-light text-dark{% endif %}"
+                            onmouseover="this.classList.add('bg-light', 'text-dark')"
+                            onmouseout="if (this.getAttribute('data-active') !== 'true') this.classList.remove('bg-light', 'text-dark')"
+                            data-active="{% if current == 'recordservicepage' %}true{% else %}false{% endif %}">
                             <i class="fa-solid fa-clipboard-list pe-2"></i> Services
                         </a>
                     </li>
                     <li class="nav-item">
                         <a href="{% url 'calculate' %}"
-                           class="nav-link py-3 px-4 rounded-3 {% if current == 'calculate' %}bg-light text-dark{% endif %}"
-                           onmouseover="this.classList.add('bg-light', 'text-dark')"
-                           onmouseout="if (this.getAttribute('data-active') !== 'true') this.classList.remove('bg-light', 'text-dark')"
-                           data-active="{% if current == 'calculate' %}true{% else %}false{% endif %}">
+                            class="nav-link py-3 px-4 rounded-3 {% if current == 'calculate' %}bg-light text-dark{% endif %}"
+                            onmouseover="this.classList.add('bg-light', 'text-dark')"
+                            onmouseout="if (this.getAttribute('data-active') !== 'true') this.classList.remove('bg-light', 'text-dark')"
+                            data-active="{% if current == 'calculate' %}true{% else %}false{% endif %}">
                             <i class="fa-solid fa-wallet pe-2"></i> Payout
                         </a>
                     </li>
                     <li class="nav-item">
                         <a href="{% url 'recordexpensespage' %}"
-                           class="nav-link py-3 px-4 rounded-3 {% if current == 'recordexpensespage' %}bg-light text-dark{% endif %}"
-                           onmouseover="this.classList.add('bg-light', 'text-dark')"
-                           onmouseout="if (this.getAttribute('data-active') !== 'true') this.classList.remove('bg-light', 'text-dark')"
-                           data-active="{% if current == 'recordexpensespage' %}true{% else %}false{% endif %}">
+                            class="nav-link py-3 px-4 rounded-3 {% if current == 'recordexpensespage' %}bg-light text-dark{% endif %}"
+                            onmouseover="this.classList.add('bg-light', 'text-dark')"
+                            onmouseout="if (this.getAttribute('data-active') !== 'true') this.classList.remove('bg-light', 'text-dark')"
+                            data-active="{% if current == 'recordexpensespage' %}true{% else %}false{% endif %}">
                             <i class="fa-solid fa-wallet pe-2"></i> Expenses
                         </a>
                     </li>
                     <li class="nav-item">
                         <a href="{% url 'productspage' %}"
-                           class="nav-link py-3 px-4 rounded-3 {% if current == 'productspage' %}bg-light text-dark{% endif %}"
-                           onmouseover="this.classList.add('bg-light', 'text-dark')"
-                           onmouseout="if (this.getAttribute('data-active') !== 'true') this.classList.remove('bg-light', 'text-dark')"
-                           data-active="{% if current == 'productspage' %}true{% else %}false{% endif %}">
+                            class="nav-link py-3 px-4 rounded-3 {% if current == 'productspage' %}bg-light text-dark{% endif %}"
+                            onmouseover="this.classList.add('bg-light', 'text-dark')"
+                            onmouseout="if (this.getAttribute('data-active') !== 'true') this.classList.remove('bg-light', 'text-dark')"
+                            data-active="{% if current == 'productspage' %}true{% else %}false{% endif %}">
                             <i class="fa-solid fa-box pe-2"></i> Product
                         </a>
                     </li>
                     <li class="nav-item">
                         <a href="{% url 'calenderpage' %}"
-                           class="nav-link py-3 px-4 rounded-3 {% if current == 'calenderpage' %}bg-light text-dark{% endif %}"
-                           onmouseover="this.classList.add('bg-light', 'text-dark')"
-                           onmouseout="if (this.getAttribute('data-active') !== 'true') this.classList.remove('bg-light', 'text-dark')"
-                           data-active="{% if current == 'calenderpage' %}true{% else %}false{% endif %}">
+                            class="nav-link py-3 px-4 rounded-3 {% if current == 'calenderpage' %}bg-light text-dark{% endif %}"
+                            onmouseover="this.classList.add('bg-light', 'text-dark')"
+                            onmouseout="if (this.getAttribute('data-active') !== 'true') this.classList.remove('bg-light', 'text-dark')"
+                            data-active="{% if current == 'calenderpage' %}true{% else %}false{% endif %}">
                             <i class="fa-solid fa-calendar pe-2"></i> Calendar
                         </a>
                     </li>
                     {% endif %}
-        
+
+
+                    <!-- staff nav -->
+                    {% if user.is_not_secretary %}
+
+                    {% endif %}
+
+                    <!-- admin nav -->
+                    {% if user.is_admin %}
+
+                    {% endif %}
+
                     {% endwith %}
                 </ul>
             </div>
         </aside>
-        
-        
 
 
         {% block content %}

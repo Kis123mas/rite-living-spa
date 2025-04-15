@@ -5,6 +5,8 @@ from django.contrib.auth import authenticate, login, logout
 from .forms import *
 import calendar
 import json
+from django.core.paginator import Paginator
+from django.db.models import Q
 from django.db.models.functions import TruncMonth
 from .models import *
 from datetime import datetime, timedelta, date
@@ -25,6 +27,10 @@ def RegisterPageView(request):
         form = CustomUserRegistrationForm(request.POST)
         if form.is_valid():
             user = form.save()
+
+            # Set backend explicitly before logging in
+            user.backend = 'django.contrib.auth.backends.ModelBackend'
+
             login(request, user)
             messages.success(request, "Registration successful!")
             return redirect('loginpage')
@@ -137,14 +143,24 @@ def CalenderPageView(request):
     # Query all uniforms for the current month and year
     uniforms_for_month = Uniform.objects.filter(uniform_date__year=year, uniform_date__month=month)
 
-    # Render the template with the generated data, form, and uniforms
-    return render(request, 'auth/calender.html', {
+
+    orders = Order.objects.select_related('client', 'product').order_by('-created_at')
+    order_count = orders.count()
+
+    context = {
+        'orders': orders,
+        'order_count': order_count,
+        'status_choices': Order.STATUS_CHOICES,
         'calendar_weeks': days_of_week,
         'month_name': month_name,
         'year': year,
-        'form': form,  # Pass the form to the template
-        'uniforms_for_month': uniforms_for_month,  # Pass the list of uniforms
-    })
+        'form': form,
+        'uniforms_for_month': uniforms_for_month,
+    }
+    
+
+    # Render the template with the generated data, form, and uniforms
+    return render(request, 'auth/calender.html', context)
 
 
 
@@ -156,12 +172,23 @@ def RecordservicePageView(request):
             messages.success(request, "Service recorded successfully.")
             form = ServiceRenderedForm()
         else:
-            print(form.errors)  # DEBUG
+            print(form.errors)
     else:
         form = ServiceRenderedForm()
 
     services = ServiceRendered.objects.order_by('-created_at')
-    return render(request, 'auth/recordservice.html', {'form': form, 'services': services})
+
+    orders = Order.objects.select_related('client', 'product').order_by('-created_at')
+    order_count = orders.count()
+
+    context = {
+        'form': form,
+        'services': services,
+        'orders': orders,
+        'order_count': order_count,
+        'status_choices': Order.STATUS_CHOICES,
+    }
+    return render(request, 'auth/recordservice.html', context)
 
 
 def ProfilePageView(request):
@@ -173,8 +200,18 @@ def ProfilePageView(request):
     
     # Get the logged-in user's profile (or 404 if not found)
     user_profile = get_object_or_404(UserProfile, user=request.user)
+
+    orders = Order.objects.select_related('client', 'product').order_by('-created_at')
+    order_count = orders.count()
+
+    context = {
+        'user_profile': user_profile,
+        'orders': orders,
+        'order_count': order_count,
+        'status_choices': Order.STATUS_CHOICES,
+    }
     
-    return render(request, 'auth/profile.html', {'user_profile': user_profile})
+    return render(request, 'auth/profile.html', context)
 
 
 def ProductPage(request):
@@ -187,11 +224,19 @@ def ProductPage(request):
         form = ProductForm()
 
     products = Product.objects.all().order_by('-created_at')  # fetch products for display
-    
-    return render(request, 'auth/product.html', {
+
+    orders = Order.objects.select_related('client', 'product').order_by('-created_at')
+    order_count = orders.count()
+
+    context = {
         'form': form,
         'products': products,
-    })
+        'orders': orders,
+        'order_count': order_count,
+        'status_choices': Order.STATUS_CHOICES,
+    }
+    
+    return render(request, 'auth/product.html',context)
 
 
 
@@ -200,6 +245,42 @@ def delete_product(request, product_id):
         product = get_object_or_404(Product, id=product_id)
         product.delete()
     return redirect('productspage')
+
+
+
+def UpdateOrderStatus(request, order_id):
+    if request.method == 'POST':
+        order = get_object_or_404(Order, id=order_id)
+        new_status = request.POST.get('status')
+        
+        if new_status in dict(Order.STATUS_CHOICES):
+            order.status = new_status
+            order.save()
+    
+    return redirect(request.META.get('HTTP_REFERER', 'orders_list'))
+
+
+@login_required
+def send_order_message(request):
+    if request.method == "POST":
+        order_id = request.POST.get("order_id")
+        content = request.POST.get("content")
+
+        order = get_object_or_404(Order, id=order_id)
+        Message.objects.create(
+            order=order,
+            sender=request.user,
+            content=content
+        )
+    return redirect(request.META.get('HTTP_REFERER', '/'))
+
+
+def DeleteOrder(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
+    if request.method == "POST":
+        order.delete()
+        messages.success(request, "Order deleted successfully.")
+    return redirect('dashboardpage')
 
 
 @login_required
@@ -258,6 +339,9 @@ def RecordexpensesPageView(request):
     # Fetch the expenses filtered by month and year
     expenses = Expense.objects.filter(date__month=month, date__year=year)
 
+    orders = Order.objects.select_related('client', 'product').order_by('-created_at')
+    order_count = orders.count()
+
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':  # Check if it's an AJAX request
         # Return JSON data for AJAX request
         expenses_data = [
@@ -281,6 +365,9 @@ def RecordexpensesPageView(request):
         ],
         'month': month,
         'year': year,
+        'orders': orders,
+        'order_count': order_count,
+        'status_choices': Order.STATUS_CHOICES,
     }
 
     return render(request, 'auth/expenses.html', context)
@@ -323,7 +410,10 @@ def CalculatePageView(request):
 
     # Total amount
     total_amount = services.aggregate(total=Sum('amount'))['total'] or 0
-        
+
+
+    orders = Order.objects.select_related('client', 'product').order_by('-created_at')
+    order_count = orders.count()
 
     context = {
         'staff_jobs': staff_jobs,
@@ -333,6 +423,9 @@ def CalculatePageView(request):
         'month_name': month_name,
         'all_jobs': all_jobs,
         'total_amount': total_amount,
+        'orders': orders,
+        'order_count': order_count,
+        'status_choices': Order.STATUS_CHOICES,
     }
 
     return render(request, 'auth/calculate.html', context)
@@ -391,6 +484,19 @@ def DashboardPageView(request):
     staff_data = [s['total'] for s in services]
 
 
+    orders = Order.objects.select_related('client', 'product').order_by('-created_at')
+    order_count = orders.count()
+    user_order_count = orders.filter(client=user).count()
+
+    user_orders = Order.objects.filter(client=user).select_related('product').prefetch_related('messages').order_by('-created_at')
+    user_order_count_show = user_orders.count()
+
+
+    # Booking form logic...
+    total_bookings = SpaSessionBooking.objects.count()
+    all_bookings = SpaSessionBooking.objects.all()
+
+
     # Pass all the data to the template
     context = {
         'user': user,
@@ -400,24 +506,115 @@ def DashboardPageView(request):
         'months': months,  # Pass the list of months
         'month': month,
         'year': year,
+        'orders': orders,
+        'user_orders': user_orders,
+        'user_order_count_show': user_order_count_show,
+        'order_count': order_count,
+        'user_order_count': user_order_count,
+        'status_choices': Order.STATUS_CHOICES,
+
+        'total_bookings': total_bookings,
+        'all_bookings': all_bookings,
     }
 
     return render(request, 'auth/dashboard.html', context)
 
 
 def StorePageView(request):
-    """ store page """
-    return render(request, 'auth/store.html')
+    products_list = Product.objects.all().order_by('-created_at')
+    paginator = Paginator(products_list, 6)  # 6 products per page
+    page_number = request.GET.get('page')
+    products = paginator.get_page(page_number)
+
+    return render(request, 'auth/store.html', {'products': products})
+
+
+
+@login_required
+def PlaceOrderView(request):
+    if request.method == 'POST':
+        product_id = request.POST.get('product_id')
+        uploaded_file = request.FILES.get('uploaded_file')
+
+        product = Product.objects.get(id=product_id)
+        Order.objects.create(
+            client=request.user,
+            product=product,
+            uploaded_file=uploaded_file
+        )
+        return redirect('dashboardpage')  # or wherever you'd like
+
+    return redirect('dashboardpage')
+
 
 
 def BookPageView(request):
-    """ book page """
-    return render(request, 'auth/booksession.html')
+    if request.method == 'POST':
+        form = SpaSessionBookingForm(request.POST)
+        if form.is_valid():
+            booking = form.save(commit=False)
+            booking.user = request.user
+            booking.save()
+            form = SpaSessionBookingForm()
+            return redirect('booksessionpage')
+    else:
+        form = SpaSessionBookingForm()
+
+    user_bookings = SpaSessionBooking.objects.filter(user=request.user).order_by('-created_at')
+    return render(request, 'auth/booksession.html', {
+        'form': form,
+        'bookings': user_bookings
+    })
+
+
+
+@login_required(login_url='loginpage')
+def UpdateBookingStatus(request, booking_id):
+    booking = get_object_or_404(SpaSessionBooking, id=booking_id)
+
+    if request.method == "POST":
+
+        new_status = request.POST.get("status")
+        if new_status:
+            booking.status = new_status
+            booking.save()
+            messages.success(request, "Booking status updated successfully.")
+        else:
+            messages.error(request, "Please select a valid status.")
+
+    return redirect('booksessionpage')
+
+
+
+@login_required(login_url='loginpage')
+def DeleteBooking(request, booking_id):
+    booking = get_object_or_404(SpaSessionBooking, id=booking_id)
+
+    if request.method == "POST":
+
+        booking.delete()
+        messages.success(request, "Booking deleted successfully.")
+
+    return redirect('booksessionpage')
+
 
 
 def UserReviewPageView(request):
     """ review page """
-    return render(request, 'auth/review.html')
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            if request.user.is_authenticated:
+                review.user = request.user
+            review.save()
+            return redirect('userreviewpage')
+        else:
+            print(form.errors)  # DEBUG: Show form validation errors
+    else:
+        form = ReviewForm()
+
+    return render(request, 'auth/review.html', {'form': form})
 
 
 def AboutPageView(request):
@@ -427,6 +624,7 @@ def AboutPageView(request):
 
 def ServicePageView(request):
     """ service page """
+    
     return render(request, 'firstApp/servicepage.html')
 
 

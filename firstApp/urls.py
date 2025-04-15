@@ -10,6 +10,8 @@ urlpatterns = [
     path('dashboard', DashboardPageView, name='dashboardpage'),
     path('store', StorePageView, name='storepage'),
     path('book-session', BookPageView, name='booksessionpage'),
+    path('update-booking-status/<int:booking_id>/', UpdateBookingStatus, name='update_booking_status'),
+    path('delete-booking/<int:booking_id>/', DeleteBooking, name='delete_booking'),
     path('user-review', UserReviewPageView, name='userreviewpage'),
     path('about', AboutPageView, name='aboutpage'),
     path('service', ServicePageView, name='servicepage'),
@@ -25,4 +27,8 @@ urlpatterns = [
     path('update-profile', UpdateProfileView, name='profileupdatepage'),
     path('product', ProductPage, name='productspage'),
     path('delete-product/<int:product_id>/', delete_product, name='delete_product'),
+    path('orders/delete/<int:order_id>/', DeleteOrder, name='delete_order'),
+    path('orders/<int:order_id>/update-status/', UpdateOrderStatus, name='update_order_status'),
+    path("send-message/", send_order_message, name="send_order_message"),
+    path('place-order/', PlaceOrderView, name='place_order'),
 ]

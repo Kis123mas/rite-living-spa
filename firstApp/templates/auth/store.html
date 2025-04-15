@@ -6,77 +6,155 @@
 <div class="main">
     {% include 'auth/nav.html' %}
 
-    <main class="content px-3 py-2">
+    <main class="content px-3 py-2" style="max-height: 90vh; overflow-y: auto;">
         <h2 class="text-center mb-4 fw-bold">Spa Product Store</h2>
-
-        <!-- Search Bar -->
-        <div class="row mb-4">
-            <div class="col-md-6 offset-md-3">
-                <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Search spa products...">
-                    <button class="btn btn-brand" type="button">
-                        <i class="fa-solid fa-magnifying-glass"></i> Search
-                    </button>
-                </div>
-            </div>
-        </div>
 
         <!-- Product Cards -->
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-            <!-- Product 1 -->
+            {% for product in products %}
             <div class="col">
                 <div class="card h-100 shadow-sm" style="font-size: 0.9rem;">
-                    <img src="{% static 'firstApp/images/heropicture.jpg' %}" class="card-img-top" alt="Spa Oil" style="height: 150px; object-fit: cover;">
+                    <img src="{{ product.uploaded_file.url }}" class="card-img-top" alt="{{ product.name }}"
+                        style="height: 150px; object-fit: cover;">
                     <div class="card-body p-2">
-                        <h6 class="card-title fw-semibold mb-2">Aromatic Spa Oil</h6>
-                        <p class="card-text mb-2">Relax with our premium aromatic oils perfect for massage therapy.</p>
-                        <p class="text-primary fw-bold mb-2">$19.99</p>
-                        <a href="#" class="btn btn-sm btn-brand w-100">BUY</a>
+                        <h6 class="card-title fw-semibold mb-2">{{ product.name }}</h6>
+                        <p class="card-text mb-2">{{ product.description|truncatewords:15 }}</p>
+                        <p class="text-primary fw-bold mb-2">₦{{ product.price }}</p>
+                        <a href="#" class="btn btn-sm btn-brand w-100" onclick="showBuyModal('{{ product.id }}')">BUY</a>
                     </div>
                 </div>
             </div>
-
-            <!-- Product 2 -->
+            {% empty %}
             <div class="col">
-                <div class="card h-100 shadow-sm" style="font-size: 0.9rem;">
-                    <img src="{% static 'firstApp/images/heropicture.jpg' %}" class="card-img-top" alt="Facial Cream" style="height: 150px; object-fit: cover;">
-                    <div class="card-body p-2">
-                        <h6 class="card-title fw-semibold mb-2">Rejuvenating Facial Cream</h6>
-                        <p class="card-text mb-2">Give your skin the glow it deserves with our organic facial cream.</p>
-                        <p class="text-primary fw-bold mb-2">$29.99</p>
-                        <a href="#" class="btn btn-sm btn-brand w-100">BUY</a>
-                    </div>
-                </div>
+                <p class="text-center">No products available right now.</p>
             </div>
-
-            <!-- Product 3 -->
-            <div class="col">
-                <div class="card h-100 shadow-sm" style="font-size: 0.9rem;">
-                    <img src="{% static 'firstApp/images/heropicture.jpg' %}" class="card-img-top" alt="Bath Salt" style="height: 150px; object-fit: cover;">
-                    <div class="card-body p-2">
-                        <h6 class="card-title fw-semibold mb-2">Lavender Bath Salt</h6>
-                        <p class="card-text mb-2">Soothe your muscles and mind with our calming lavender bath salts.</p>
-                        <p class="text-primary fw-bold mb-2">$14.99</p>
-                        <a href="#" class="btn btn-sm btn-brand w-100">BUY</a>
-                    </div>
-                </div>
-            </div>
+            {% endfor %}
         </div>
+
 
         <!-- Pagination (Static) -->
         <div class="d-flex justify-content-center mt-4">
             <nav>
                 <ul class="pagination pagination-sm">
+                    {% if products.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ products.previous_page_number }}">Previous</a>
+                    </li>
+                    {% else %}
                     <li class="page-item disabled"><span class="page-link">Previous</span></li>
-                    <li class="page-item active"><span class="page-link">1</span></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                    {% endif %}
+                
+                    {% for num in products.paginator.page_range %}
+                    {% if products.number == num %}
+                    <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                    {% else %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                    </li>
+                    {% endif %}
+                    {% endfor %}
+                
+                    {% if products.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ products.next_page_number }}">Next</a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled"><span class="page-link">Next</span></li>
+                    {% endif %}
                 </ul>
+                
             </nav>
-           
         </div>
     </main>
 </div>
+
+
+<!-- Disclaimer Modal -->
+<div class="modal fade" id="buyDisclaimerModal" tabindex="-1" aria-labelledby="buyDisclaimerModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content text-center p-4">
+            <div class="modal-body">
+                <i class="bi bi-exclamation-triangle-fill text-warning fs-1 mb-3"></i>
+                <h5 class="mb-3 fw-bold">Important Notice Before Purchase</h5>
+                <p class="mb-3">
+                    To place an order, kindly make a transaction of the exact product amount to the provided account details.
+                    After payment, return to this page to place your order and include your proof of payment.
+                </p>
+                <p class="text-muted small">Note: Orders without valid payment confirmation will not be processed.</p>
+
+                <!-- Buttons -->
+                <div class="d-flex flex-column gap-2 mt-4">
+                    <button type="button" class="btn btn-outline-info" data-bs-toggle="collapse" data-bs-target="#accountDetails">
+                        View Account Details
+                    </button>
+
+                    <button type="button" class="btn btn-primary" onclick="showOrderFormModal()">Proceed to Order</button>
+
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>
+
+                <!-- Account Details Section -->
+                <div class="collapse mt-3" id="accountDetails">
+                    <div class="card card-body text-start">
+                        <p><strong>Bank:</strong> Zenith Bank</p>
+                        <p><strong>Account Name:</strong> Spa Beauty World</p>
+                        <p><strong>Account Number:</strong> 1234567890</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Order Form Modal -->
+<div class="modal fade" id="orderFormModal" tabindex="-1" aria-labelledby="orderFormModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content p-4">
+            <div class="modal-header">
+                <h5 class="modal-title" id="orderFormModalLabel">Complete Your Order</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" enctype="multipart/form-data" action="{% url 'place_order' %}">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <input type="hidden" name="product_id" id="orderProductId">
+                    <input type="hidden" name="client_id" value="{{ request.user.id }}">
+                    
+                    <div class="mb-3">
+                        <label for="uploadedFile" class="form-label">Upload Proof of Payment</label>
+                        <input type="file" class="form-control" name="uploaded_file" id="uploadedFile" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Submit Order</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    let selectedProductId = null;
+
+    function showBuyModal(productId) {
+        selectedProductId = productId;
+        const modal = new bootstrap.Modal(document.getElementById('buyDisclaimerModal'));
+        modal.show();
+    }
+
+    function showOrderFormModal() {
+        if (selectedProductId) {
+            document.getElementById('orderProductId').value = selectedProductId;
+        }
+        const modal = new bootstrap.Modal(document.getElementById('orderFormModal'));
+        modal.show();
+    }
+</script>
+
 
 {% endblock %}
