@@ -193,6 +193,8 @@ def RecordservicePageView(request):
 
 def ProfilePageView(request):
     """ Profile page """
+
+    user = request.user
     
     # Ensure the user is logged in
     if not request.user.is_authenticated:
@@ -204,11 +206,26 @@ def ProfilePageView(request):
     orders = Order.objects.select_related('client', 'product').order_by('-created_at')
     order_count = orders.count()
 
+
+    orders = Order.objects.select_related('client', 'product').order_by('-created_at')
+    order_count = orders.count()
+    user_order_count = orders.filter(client=user).count()
+
+    user_orders = Order.objects.filter(client=user).select_related('product').prefetch_related('messages').order_by('-created_at')
+    user_order_count_show = user_orders.count()
+
     context = {
         'user_profile': user_profile,
         'orders': orders,
         'order_count': order_count,
         'status_choices': Order.STATUS_CHOICES,
+
+
+        'user' : user,
+        'orders': orders,
+        'user_order_count': user_order_count,
+        'user_orders': user_orders,
+        'user_order_count_show': user_order_count_show
     }
     
     return render(request, 'auth/profile.html', context)
@@ -520,13 +537,32 @@ def DashboardPageView(request):
     return render(request, 'auth/dashboard.html', context)
 
 
+@login_required(login_url='loginpage')
 def StorePageView(request):
+    user = request.user
+
     products_list = Product.objects.all().order_by('-created_at')
     paginator = Paginator(products_list, 6)  # 6 products per page
     page_number = request.GET.get('page')
     products = paginator.get_page(page_number)
 
-    return render(request, 'auth/store.html', {'products': products})
+    orders = Order.objects.select_related('client', 'product').order_by('-created_at')
+    order_count = orders.count()
+    user_order_count = orders.filter(client=user).count()
+
+    user_orders = Order.objects.filter(client=user).select_related('product').prefetch_related('messages').order_by('-created_at')
+    user_order_count_show = user_orders.count()
+
+    context = {
+        'products': products,
+        'orders': orders,
+        'order_count': order_count,
+        'user_order_count': user_order_count,
+        'user_orders': user_orders,
+        'user_order_count_show': user_order_count_show
+    }
+
+    return render(request, 'auth/store.html', context)
 
 
 
@@ -549,6 +585,7 @@ def PlaceOrderView(request):
 
 
 def BookPageView(request):
+    user = request.user
     if request.method == 'POST':
         form = SpaSessionBookingForm(request.POST)
         if form.is_valid():
@@ -561,10 +598,25 @@ def BookPageView(request):
         form = SpaSessionBookingForm()
 
     user_bookings = SpaSessionBooking.objects.filter(user=request.user).order_by('-created_at')
-    return render(request, 'auth/booksession.html', {
+
+    orders = Order.objects.select_related('client', 'product').order_by('-created_at')
+    order_count = orders.count()
+    user_order_count = orders.filter(client=user).count()
+
+    user_orders = Order.objects.filter(client=user).select_related('product').prefetch_related('messages').order_by('-created_at')
+    user_order_count_show = user_orders.count()
+
+    context = {
+        'user' : user,
+        'orders': orders,
         'form': form,
-        'bookings': user_bookings
-    })
+        'bookings': user_bookings,
+        'order_count': order_count,
+        'user_order_count': user_order_count,
+        'user_orders': user_orders,
+        'user_order_count_show': user_order_count_show
+    }
+    return render(request, 'auth/booksession.html', context)
 
 
 
@@ -601,6 +653,7 @@ def DeleteBooking(request, booking_id):
 
 def UserReviewPageView(request):
     """ review page """
+    user = request.user
     if request.method == 'POST':
         form = ReviewForm(request.POST)
         if form.is_valid():
@@ -614,7 +667,24 @@ def UserReviewPageView(request):
     else:
         form = ReviewForm()
 
-    return render(request, 'auth/review.html', {'form': form})
+    orders = Order.objects.select_related('client', 'product').order_by('-created_at')
+    order_count = orders.count()
+    user_order_count = orders.filter(client=user).count()
+
+    user_orders = Order.objects.filter(client=user).select_related('product').prefetch_related('messages').order_by('-created_at')
+    user_order_count_show = user_orders.count()
+
+    context = {
+        'user' : user,
+        'orders': orders,
+        'form': form,
+        'order_count': order_count,
+        'user_order_count': user_order_count,
+        'user_orders': user_orders,
+        'user_order_count_show': user_order_count_show
+    }
+
+    return render(request, 'auth/review.html', context)
 
 
 def AboutPageView(request):
@@ -642,6 +712,43 @@ def ContactPageView(request):
     """ contact page """
     return render(request, 'firstApp/contactpage.html')
 
+
+def JobsPage(request):
+    """ Staff job page with month/year filtering """
+
+    user = request.user
+    month = request.GET.get('month')
+    year = request.GET.get('year')
+
+    services = ServiceRendered.objects.filter(staff_name=user)
+
+    total_amount = services.aggregate(Sum('amount'))['amount__sum'] or 0
+
+    if month and year:
+        services = services.filter(
+            service_date__month=int(month),
+            service_date__year=int(year)
+        )
+
+    # For the filter dropdowns
+    current_year = datetime.now().year
+    years = range(current_year - 5, current_year + 1)
+    months = [
+        (1, 'January'), (2, 'February'), (3, 'March'), (4, 'April'),
+        (5, 'May'), (6, 'June'), (7, 'July'), (8, 'August'),
+        (9, 'September'), (10, 'October'), (11, 'November'), (12, 'December')
+    ]
+
+    context = {
+        'services': services,
+        'months': months,
+        'years': years,
+        'selected_month': month,
+        'selected_year': year,
+        'total_amount': total_amount,
+    }
+
+    return render(request, 'auth/jobs.html', context)
 
 
 def NotfoundPageView(request, exception):

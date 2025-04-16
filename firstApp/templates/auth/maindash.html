@@ -144,7 +144,24 @@
 
                     <!-- staff nav -->
                     {% if user.is_not_secretary %}
-
+                    <li class="nav-item">
+                        <a href="{% url 'jobspage' %}"
+                            class="nav-link py-3 px-4 rounded-3 {% if current == 'jobspage' %}bg-light text-dark{% endif %}"
+                            onmouseover="this.classList.add('bg-light', 'text-dark')"
+                            onmouseout="if (this.getAttribute('data-active') !== 'true') this.classList.remove('bg-light', 'text-dark')"
+                            data-active="{% if current == 'jobspage' %}true{% else %}false{% endif %}">
+                            <i class="fa-solid fa-clipboard-check pe-2"></i> Jobs
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'calenderpage' %}"
+                            class="nav-link py-3 px-4 rounded-3 {% if current == 'calenderpage' %}bg-light text-dark{% endif %}"
+                            onmouseover="this.classList.add('bg-light', 'text-dark')"
+                            onmouseout="if (this.getAttribute('data-active') !== 'true') this.classList.remove('bg-light', 'text-dark')"
+                            data-active="{% if current == 'calenderpage' %}true{% else %}false{% endif %}">
+                            <i class="fa-solid fa-calendar pe-2"></i> Calendar
+                        </a>
+                    </li>
                     {% endif %}
 
                     <!-- admin nav -->

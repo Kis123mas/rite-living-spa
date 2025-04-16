@@ -31,4 +31,5 @@ urlpatterns = [
     path('orders/<int:order_id>/update-status/', UpdateOrderStatus, name='update_order_status'),
     path("send-message/", send_order_message, name="send_order_message"),
     path('place-order/', PlaceOrderView, name='place_order'),
+    path('jobs', JobsPage, name='jobspage'),
 ]

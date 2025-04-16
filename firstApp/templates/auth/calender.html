@@ -20,9 +20,11 @@
             </button>
 
             <!-- Post Uniform Button -->
+             {% if request.user.is_secretary %}
             <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#postUniformModal">
                 <i class="fa fa-upload pe-1"></i>
             </button>
+            {% endif %}
         </div>
 
         <div class="calendar-container">
