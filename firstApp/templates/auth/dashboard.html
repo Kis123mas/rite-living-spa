@@ -74,7 +74,6 @@
 
         <!-- for staffs only -->
         {% if user.is_not_secretary %}
-
         <div class="container my-4">
             <div class="card shadow-sm border-0 rounded-4">
                 <div class="card-body">
@@ -113,13 +112,11 @@
                 </div>
             </div>
         </div>
-        
-
         {% endif %}
 
 
-        {% if not request.user.is_secretary and not request.user.is_not_secretary and not request.user.is_superuser %}
-
+        <!-- client user only -->
+        {% if not request.user.is_secretary and not request.user.is_not_secretary and not request.user.is_admin %}
         <div class="container my-3">
             <!-- Welcome Section -->
             <div class="text-center mb-5">
@@ -156,7 +153,6 @@
                 </div>
             </div>
         </div>
-
         <!-- Animations -->
         <style>
             @keyframes fadeIn {
@@ -196,7 +192,137 @@
 
 
         {% if user.is_admin %}
-
+            <div class="container my-3">
+                <div class="row g-3 mb-4">
+                    <!-- Cards -->
+                    <div class="col-12 col-sm-6 col-lg-3">
+                        <div class="card text-white bg-primary rounded-4 shadow-sm h-100">
+                            <div class="card-body d-flex flex-column flex-md-row align-items-center text-center text-md-start gap-2">
+                                <i class="bi bi-people-fill fs-1"></i>
+                                <div>
+                                    <h6 class="mb-1 small">Total Users</h6>
+                                    <h3 class="mb-0">{{ total_users }}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+        
+                    <div class="col-12 col-sm-6 col-lg-3">
+                        <div class="card text-white bg-success rounded-4 shadow-sm h-100">
+                            <div class="card-body d-flex flex-column flex-md-row align-items-center text-center text-md-start gap-2">
+                                <i class="bi bi-briefcase-fill fs-1"></i>
+                                <div>
+                                    <h6 class="mb-1 small">Total Services</h6>
+                                    <h3 class="mb-0">{{ total_services }}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+        
+                    <div class="col-12 col-sm-6 col-lg-3">
+                        <div class="card text-white bg-info rounded-4 shadow-sm h-100">
+                            <div class="card-body d-flex flex-column flex-md-row align-items-center text-center text-md-start gap-2">
+                                <i class="bi bi-cash-coin fs-1"></i>
+                                <div>
+                                    <h6 class="mb-1 small">Total Income</h6>
+                                    <h3 class="mb-0">₦{{ total_income|floatformat:2 }}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+        
+                    <div class="col-12 col-sm-6 col-lg-3">
+                        <div class="card text-white bg-danger rounded-4 shadow-sm h-100">
+                            <div class="card-body d-flex flex-column flex-md-row align-items-center text-center text-md-start gap-2">
+                                <i class="bi bi-wallet2 fs-1"></i>
+                                <div>
+                                    <h6 class="mb-1 small">Total Expenses</h6>
+                                    <h3 class="mb-0">₦{{ total_expenses|floatformat:2 }}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+                <!-- Recent Services Table -->
+                <div class="mb-4">
+                    <h4 class="mb-3">Recent Services</h4>
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Staff</th>
+                                    <th>Service</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for s in recent_services %}
+                                <tr>
+                                    <td>{{ s.service_date }}</td>
+                                    <td>{{ s.staff_name.get_full_name|default:s.staff_name.email }}</td>
+                                    <td>{{ s.service_rendered }}</td>
+                                    <td>₦{{ s.amount }}</td>
+                                    <td><span class="badge bg-success">{{ s.payment_status|title }}</span></td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+        
+                <!-- Pending Bookings -->
+                <div class="mb-4">
+                    <h4 class="mb-3">Pending Spa Bookings</h4>
+                    <ul class="list-group">
+                        {% for booking in pending_bookings %}
+                        <li class="list-group-item d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
+                            <div>
+                                <i class="bi bi-calendar-event-fill me-2 text-warning"></i>
+                                {{ booking.user.first_name }} - {{ booking.service_type }} on {{ booking.preferred_date }}
+                            </div>
+                            <span class="badge bg-warning text-dark mt-2 mt-md-0">{{ booking.status|title }}</span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+        
+                <!-- Recent Reviews -->
+                <div class="mb-4">
+                    <h4 class="mb-3">Recent Reviews</h4>
+                    <ul class="list-group">
+                        {% for review in recent_reviews %}
+                        <li class="list-group-item">
+                            <div class="d-flex justify-content-between">
+                                <strong>{{ review.name }}</strong>
+                                <span>{{ review.rating }}⭐</span>
+                            </div>
+                            <small class="text-muted">{{ review.message }}</small>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+        
+                <!-- Recent Orders -->
+                <div>
+                    <h4 class="mb-3">Recent Orders</h4>
+                    <ul class="list-group">
+                        {% for order in recent_orders %}
+                        <li class="list-group-item d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
+                            <div>
+                                <i class="bi bi-bag-fill me-2 text-secondary"></i>
+                                {{ order.client.first_name }} - {{ order.product.name }}
+                            </div>
+                            <span class="badge bg-secondary mt-2 mt-md-0">{{ order.status|title }}</span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        
+        
         {% endif %}
     </main>
 

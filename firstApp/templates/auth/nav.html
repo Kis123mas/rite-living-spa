@@ -31,10 +31,8 @@
             </li>
             {% endif %}
 
-            
-
             <!-- client nav -->
-            {% if not request.user.is_secretary and not request.user.is_not_secretary and not request.user.is_superuser %}
+            {% if not request.user.is_secretary and not request.user.is_not_secretary and not request.user.is_admin %}
             <li class="nav-item position-relative me-4">
                 <a href="#" class="nav-link d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#userordersModal" title="Your Orders">
                     <i class="bi bi-box-seam me-1 fs-5"></i>

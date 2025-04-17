@@ -48,7 +48,7 @@
                     </a>
                 </div>
 
-                <ul class="nav flex-column sidebar-nav d-flex flex-column gap-3">
+                <ul class="nav flex-column sidebar-nav d-flex flex-column gap-3 mx-3">
                     {% with current=request.resolver_match.url_name %}
 
                     <li class="nav-item">
@@ -166,6 +166,26 @@
 
                     <!-- admin nav -->
                     {% if user.is_admin %}
+                    <li class="nav-item">
+                        <a href="{% url 'userpage' %}" 
+                            class="nav-link py-3 px-4 rounded-3 {% if current == 'userpage' %}bg-light text-dark{% endif %}" 
+                            onmouseover="this.classList.add('bg-light', 'text-dark')" 
+                            onmouseout="if (this.getAttribute('data-active') !== 'true') this.classList.remove('bg-light', 'text-dark')" 
+                            data-active="{% if current == 'userpage' %}true{% else %}false{% endif %}">
+                            <i class="fa-solid fa-user pe-2"></i> Users
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="{% url 'staffpage' %}"
+                            class="nav-link py-3 px-4 rounded-3 {% if current == 'staffpage' %}bg-light text-dark{% endif %}"
+                            onmouseover="this.classList.add('bg-light', 'text-dark')"
+                            onmouseout="if (this.getAttribute('data-active') !== 'true') this.classList.remove('bg-light', 'text-dark')"
+                            data-active="{% if current == 'staffpage' %}true{% else %}false{% endif %}">
+                            <i class="fa-solid fa-user-tie pe-2"></i> Staffs
+                        </a>
+                    </li>
+
 
                     {% endif %}
 

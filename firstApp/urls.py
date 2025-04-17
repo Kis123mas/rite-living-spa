@@ -32,4 +32,8 @@ urlpatterns = [
     path("send-message/", send_order_message, name="send_order_message"),
     path('place-order/', PlaceOrderView, name='place_order'),
     path('jobs', JobsPage, name='jobspage'),
+    path('staffs', StaffPageView, name='staffpage'),
+    path('users', UsersPageView, name='userpage'),
+    path('users/edit/<int:user_id>/', EditUserView, name='edit_user'),
+    path('users/delete/<int:user_id>/', delete_user, name='delete_user'),
 ]

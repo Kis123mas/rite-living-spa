@@ -12,6 +12,7 @@ from .models import *
 from datetime import datetime, timedelta, date
 from django.db.models import Count, Sum
 from django.http import JsonResponse
+from django.contrib.auth import get_user_model
 
 
 
@@ -481,6 +482,8 @@ def DashboardPageView(request):
     user = request.user
     profile = getattr(user, 'profile', None)
 
+    User = get_user_model()
+
     # Get the current month and year (or use query parameters to select a different month/year)
     month = int(request.GET.get('month', date.today().month))
     year = int(request.GET.get('year', date.today().year))
@@ -514,6 +517,17 @@ def DashboardPageView(request):
     all_bookings = SpaSessionBooking.objects.all()
 
 
+    # super admin
+    total_users = User.objects.count()
+    total_services = ServiceRendered.objects.count()
+    total_income = ServiceRendered.objects.aggregate(Sum('amount'))['amount__sum'] or 0
+    total_expenses = Expense.objects.aggregate(Sum('amount'))['amount__sum'] or 0
+    recent_services = ServiceRendered.objects.select_related('staff_name').order_by('-service_date')[:5]
+    recent_reviews = Review.objects.order_by('-created_at')[:5]
+    recent_orders = Order.objects.select_related('client', 'product').order_by('-created_at')[:5]
+    pending_bookings = SpaSessionBooking.objects.filter(status='pending').order_by('-created_at')[:5]
+
+
     # Pass all the data to the template
     context = {
         'user': user,
@@ -532,6 +546,16 @@ def DashboardPageView(request):
 
         'total_bookings': total_bookings,
         'all_bookings': all_bookings,
+
+        # super admin
+        'total_users': total_users,
+        'total_services': total_services,
+        'total_income': total_income,
+        'total_expenses': total_expenses,
+        'recent_services': recent_services,
+        'recent_reviews': recent_reviews,
+        'recent_orders': recent_orders,
+        'pending_bookings': pending_bookings,
     }
 
     return render(request, 'auth/dashboard.html', context)
@@ -711,6 +735,62 @@ def ReviewPageView(request):
 def ContactPageView(request):
     """ contact page """
     return render(request, 'firstApp/contactpage.html')
+
+
+def StaffPageView(request):
+    """ staff page from admin view """
+    staff_users = CustomUser.objects.filter(is_not_secretary=True)
+
+    return render(request, 'auth/staffpage.html', {
+        'staff_users': staff_users,
+    })
+
+
+
+def UsersPageView(request):
+    """ User page from admin view, with search functionality """
+    query = request.GET.get('q', '')  # Get the search query
+    users = CustomUser.objects.exclude(is_admin=True)
+
+    if query:
+        users = users.filter(
+            Q(first_name__icontains=query) | 
+            Q(last_name__icontains=query) | 
+            Q(email__icontains=query)
+        )
+
+    return render(request, 'auth/users.html', {
+        'users': users,
+        'query': query,  # Pass the query back to the template to keep the search box filled
+    })
+
+
+def EditUserView(request, user_id):
+    """ Handle editing user information """
+    user = get_object_or_404(CustomUser, id=user_id)
+
+    if request.method == 'POST':
+        user.email = request.POST.get('email')
+        user.first_name = request.POST.get('first_name')
+        user.last_name = request.POST.get('last_name')
+        user.is_secretary = request.POST.get('is_secretary') == 'true'
+        user.is_not_secretary = request.POST.get('is_not_secretary') == 'true'
+        user.is_admin = request.POST.get('is_admin') == 'true'
+        user.is_staff = request.POST.get('is_staff') == 'true'
+        user.is_active = request.POST.get('is_active') == 'true'
+
+        user.save()
+        return redirect('userpage')
+
+    return redirect('userpage')
+
+
+def delete_user(request, user_id):
+    """ Delete a user """
+    if request.method == 'POST':
+        user = get_object_or_404(CustomUser, id=user_id)
+        user.delete()
+    return redirect('userpage')
 
 
 def JobsPage(request):
