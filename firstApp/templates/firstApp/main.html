@@ -45,40 +45,37 @@
     <nav class="navbar navbar-expand-lg bg-white sticky-top">
         <div class="container">
             <a class="navbar-brand" href="/">
-                <img src="{%static 'firstApp/images/logo.png' %}" alt="logo" width="50" height="50"/>
+                <img src="{% static 'firstApp/images/logo.png' %}" alt="logo" width="50" height="50"/>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-
-                <i class="bi bi-list"></i> <!-- Bootstrap icon -->
+                <i class="bi bi-list"></i>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="/">Home</a>
+                        <a class="nav-link {% if request.resolver_match.url_name == 'landingpage' %}active{% endif %}" href="{% url 'landingpage' %}">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'aboutpage' %}">About</a>
+                        <a class="nav-link {% if request.resolver_match.url_name == 'aboutpage' %}active{% endif %}" href="{% url 'aboutpage' %}">About</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'servicepage' %}">Services</a>
+                        <a class="nav-link {% if request.resolver_match.url_name == 'servicepage' %}active{% endif %}" href="{% url 'servicepage' %}">Services</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'productpage' %}">Products</a>
+                        <a class="nav-link {% if request.resolver_match.url_name == 'productpage' %}active{% endif %}" href="{% url 'productpage' %}">Products</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'reviewpage' %}">Review</a>
+                        <a class="nav-link {% if request.resolver_match.url_name == 'reviewpage' %}active{% endif %}" href="{% url 'reviewpage' %}">Review</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'contactpage' %}">Contact</a>
+                        <a class="nav-link {% if request.resolver_match.url_name == 'contactpage' %}active{% endif %}" href="{% url 'contactpage' %}">Contact</a>
                     </li>
                 </ul>
                 <a href="{% url 'registerpage' %}" class="btn btn-brand ms-lg-3">Register</a>
             </div>
         </div>
     </nav>
-
- 
     {% block content %}
 
         <!-- Child templates will override this section -->

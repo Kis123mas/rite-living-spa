@@ -153,6 +153,11 @@ def CalenderPageView(request):
     orders = Order.objects.select_related('client', 'product').order_by('-created_at')
     order_count = orders.count()
 
+
+    # Booking form logic...
+    total_bookings = SpaSessionBooking.objects.count()
+    all_bookings = SpaSessionBooking.objects.all()
+
     context = {
         'orders': orders,
         'order_count': order_count,
@@ -162,6 +167,8 @@ def CalenderPageView(request):
         'year': year,
         'form': form,
         'uniforms_for_month': uniforms_for_month,
+        'total_bookings': total_bookings,
+        'all_bookings': all_bookings,
     }
     
 
@@ -187,12 +194,18 @@ def RecordservicePageView(request):
     orders = Order.objects.select_related('client', 'product').order_by('-created_at')
     order_count = orders.count()
 
+    # Booking form logic...
+    total_bookings = SpaSessionBooking.objects.count()
+    all_bookings = SpaSessionBooking.objects.all()
+
     context = {
         'form': form,
         'services': services,
         'orders': orders,
         'order_count': order_count,
         'status_choices': Order.STATUS_CHOICES,
+        'total_bookings': total_bookings,
+        'all_bookings': all_bookings,
     }
     return render(request, 'auth/recordservice.html', context)
 
@@ -220,13 +233,17 @@ def ProfilePageView(request):
     user_orders = Order.objects.filter(client=user).select_related('product').prefetch_related('messages').order_by('-created_at')
     user_order_count_show = user_orders.count()
 
+    # Booking form logic...
+    total_bookings = SpaSessionBooking.objects.count()
+    all_bookings = SpaSessionBooking.objects.all()
+
     context = {
         'user_profile': user_profile,
         'orders': orders,
         'order_count': order_count,
         'status_choices': Order.STATUS_CHOICES,
-
-
+        'total_bookings': total_bookings,
+        'all_bookings': all_bookings,
         'user' : user,
         'orders': orders,
         'user_order_count': user_order_count,
@@ -251,12 +268,18 @@ def ProductPage(request):
     orders = Order.objects.select_related('client', 'product').order_by('-created_at')
     order_count = orders.count()
 
+    # Booking form logic...
+    total_bookings = SpaSessionBooking.objects.count()
+    all_bookings = SpaSessionBooking.objects.all()
+
     context = {
         'form': form,
         'products': products,
         'orders': orders,
         'order_count': order_count,
         'status_choices': Order.STATUS_CHOICES,
+        'total_bookings': total_bookings,
+        'all_bookings': all_bookings,
     }
     
     return render(request, 'auth/product.html',context)
@@ -268,7 +291,6 @@ def delete_product(request, product_id):
         product = get_object_or_404(Product, id=product_id)
         product.delete()
     return redirect('productspage')
-
 
 
 def UpdateOrderStatus(request, order_id):
@@ -365,6 +387,10 @@ def RecordexpensesPageView(request):
     orders = Order.objects.select_related('client', 'product').order_by('-created_at')
     order_count = orders.count()
 
+    # Booking form logic...
+    total_bookings = SpaSessionBooking.objects.count()
+    all_bookings = SpaSessionBooking.objects.all()
+
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':  # Check if it's an AJAX request
         # Return JSON data for AJAX request
         expenses_data = [
@@ -391,6 +417,8 @@ def RecordexpensesPageView(request):
         'orders': orders,
         'order_count': order_count,
         'status_choices': Order.STATUS_CHOICES,
+        'total_bookings': total_bookings,
+        'all_bookings': all_bookings,
     }
 
     return render(request, 'auth/expenses.html', context)
@@ -438,6 +466,11 @@ def CalculatePageView(request):
     orders = Order.objects.select_related('client', 'product').order_by('-created_at')
     order_count = orders.count()
 
+
+    # Booking form logic...
+    total_bookings = SpaSessionBooking.objects.count()
+    all_bookings = SpaSessionBooking.objects.all()
+
     context = {
         'staff_jobs': staff_jobs,
         'payment_summary': payment_summary,
@@ -449,6 +482,8 @@ def CalculatePageView(request):
         'orders': orders,
         'order_count': order_count,
         'status_choices': Order.STATUS_CHOICES,
+        'total_bookings': total_bookings,
+        'all_bookings': all_bookings,
     }
 
     return render(request, 'auth/calculate.html', context)
@@ -828,6 +863,14 @@ def profit_summary(request):
     # Month list for dropdown
     months = [(i, calendar.month_name[i]) for i in range(1, 13)]
 
+    orders = Order.objects.select_related('client', 'product').order_by('-created_at')
+    order_count = orders.count()
+
+
+    # Booking form logic...
+    total_bookings = SpaSessionBooking.objects.count()
+    all_bookings = SpaSessionBooking.objects.all()
+
     context = {
         'services': services,
         'expenses': expenses,
@@ -837,6 +880,10 @@ def profit_summary(request):
         'selected_month': selected_month,
         'selected_year': selected_year,
         'months': months,
+        'orders': orders,
+        'order_count': order_count,
+        'total_bookings': total_bookings,
+        'all_bookings': all_bookings,
     }
     return render(request, 'auth/summary.html', context)
 
