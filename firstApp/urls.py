@@ -36,4 +36,6 @@ urlpatterns = [
     path('users', UsersPageView, name='userpage'),
     path('users/edit/<int:user_id>/', EditUserView, name='edit_user'),
     path('users/delete/<int:user_id>/', delete_user, name='delete_user'),
+    path('profit-summary/', profit_summary, name='profit_summary'),
+    path('download-report/', download_report, name='download_report'),
 ]

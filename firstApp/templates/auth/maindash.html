@@ -139,6 +139,15 @@
                             <i class="fa-solid fa-calendar pe-2"></i> Calendar
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a href="{% url 'profit_summary' %}"
+                            class="nav-link py-3 px-4 rounded-3 {% if current == 'profit_summary' %}bg-light text-dark{% endif %}"
+                            onmouseover="this.classList.add('bg-light', 'text-dark')"
+                            onmouseout="if (this.getAttribute('data-active') !== 'true') this.classList.remove('bg-light', 'text-dark')"
+                            data-active="{% if current == 'profit_summary' %}true{% else %}false{% endif %}">
+                            <i class="fa-solid fa-coins pe-2"></i> Summary
+                        </a>
+                    </li>
                     {% endif %}
 
 
@@ -186,7 +195,42 @@
                         </a>
                     </li>
 
-
+                    <li class="nav-item">
+                        <a href="{% url 'profit_summary' %}"
+                            class="nav-link py-3 px-4 rounded-3 {% if current == 'profit_summary' %}bg-light text-dark{% endif %}"
+                            onmouseover="this.classList.add('bg-light', 'text-dark')"
+                            onmouseout="if (this.getAttribute('data-active') !== 'true') this.classList.remove('bg-light', 'text-dark')"
+                            data-active="{% if current == 'profit_summary' %}true{% else %}false{% endif %}">
+                            <i class="fa-solid fa-coins pe-2"></i> Summary
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'calculate' %}"
+                            class="nav-link py-3 px-4 rounded-3 {% if current == 'calculate' %}bg-light text-dark{% endif %}"
+                            onmouseover="this.classList.add('bg-light', 'text-dark')"
+                            onmouseout="if (this.getAttribute('data-active') !== 'true') this.classList.remove('bg-light', 'text-dark')"
+                            data-active="{% if current == 'calculate' %}true{% else %}false{% endif %}">
+                            <i class="fa-solid fa-wallet pe-2"></i> Payout
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'recordexpensespage' %}"
+                            class="nav-link py-3 px-4 rounded-3 {% if current == 'recordexpensespage' %}bg-light text-dark{% endif %}"
+                            onmouseover="this.classList.add('bg-light', 'text-dark')"
+                            onmouseout="if (this.getAttribute('data-active') !== 'true') this.classList.remove('bg-light', 'text-dark')"
+                            data-active="{% if current == 'recordexpensespage' %}true{% else %}false{% endif %}">
+                            <i class="fa-solid fa-wallet pe-2"></i> Expenses
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'productspage' %}"
+                            class="nav-link py-3 px-4 rounded-3 {% if current == 'productspage' %}bg-light text-dark{% endif %}"
+                            onmouseover="this.classList.add('bg-light', 'text-dark')"
+                            onmouseout="if (this.getAttribute('data-active') !== 'true') this.classList.remove('bg-light', 'text-dark')"
+                            data-active="{% if current == 'productspage' %}true{% else %}false{% endif %}">
+                            <i class="fa-solid fa-box pe-2"></i> Product
+                        </a>
+                    </li>
                     {% endif %}
 
                     {% endwith %}

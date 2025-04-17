@@ -4,7 +4,12 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from .forms import *
 import calendar
+import io
+from django.http import FileResponse
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import A4
 import json
+from reportlab.lib import colors
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.db.models.functions import TruncMonth
@@ -793,6 +798,48 @@ def delete_user(request, user_id):
     return redirect('userpage')
 
 
+def profit_summary(request):
+    # Get month and year from GET params, default to current month/year
+    month = request.GET.get('month')
+    year = request.GET.get('year')
+
+    today = timezone.now()
+    selected_month = int(month) if month else today.month
+    selected_year = int(year) if year else today.year
+
+    # Income
+    services = ServiceRendered.objects.filter(
+        service_date__month=selected_month,
+        service_date__year=selected_year,
+        payment_status='confirmed'
+    )
+    total_income = services.aggregate(total=Sum('amount'))['total'] or 0
+
+    # Expenses
+    expenses = Expense.objects.filter(
+        date__month=selected_month,
+        date__year=selected_year
+    )
+    total_expenses = expenses.aggregate(total=Sum('amount'))['total'] or 0
+
+    # Profit
+    profit = total_income - total_expenses
+
+    # Month list for dropdown
+    months = [(i, calendar.month_name[i]) for i in range(1, 13)]
+
+    context = {
+        'services': services,
+        'expenses': expenses,
+        'total_income': total_income,
+        'total_expenses': total_expenses,
+        'profit': profit,
+        'selected_month': selected_month,
+        'selected_year': selected_year,
+        'months': months,
+    }
+    return render(request, 'auth/summary.html', context)
+
 def JobsPage(request):
     """ Staff job page with month/year filtering """
 
@@ -830,6 +877,178 @@ def JobsPage(request):
 
     return render(request, 'auth/jobs.html', context)
 
+
+def download_report(request):
+    month = request.GET.get('month')
+    year = request.GET.get('year')
+
+    if not month or not year:
+        return redirect('profit_summary')
+
+    month = int(month)
+    year = int(year)
+
+    buffer = io.BytesIO()
+    p = canvas.Canvas(buffer, pagesize=A4)
+    width, height = A4
+
+    left_margin = 50
+    right_margin = width - 50
+    top_margin = height - 50
+    bottom_margin = 50
+
+    y = top_margin
+
+    def new_page():
+        nonlocal y
+        p.showPage()
+        y = top_margin
+
+    def draw_table_header(x_list, header_texts, y_position):
+        p.setFont("Helvetica-Bold", 12)
+        for i, text in enumerate(header_texts):
+            p.drawString(x_list[i] + 2, y_position, text)
+
+        # Draw header line under titles
+        p.line(x_list[0], y_position - 2, x_list[-1] + 100, y_position - 2)
+
+    # Draw Title
+    p.setFont("Helvetica-Bold", 20)
+    p.drawCentredString(width / 2, y, f"Monthly Report - {calendar.month_name[month]} {year}")
+    y -= 50
+
+    ## ------------------- Staff Services Section -------------------
+    p.setFont("Helvetica-Bold", 16)
+    p.drawString(left_margin, y, "Staff Services")
+    y -= 30
+
+    staff_members = CustomUser.objects.filter(is_not_secretary=True)
+    total_income = 0
+
+    # Table Column Positions
+    x_list = [left_margin, left_margin + 150, left_margin + 350]
+
+    # Draw the table header
+    draw_table_header(x_list, ["Staff Name", "Service Rendered", "Amount (₦)"], y)
+    y -= 25
+
+    for staff in staff_members:
+        services = ServiceRendered.objects.filter(
+            staff_name=staff,
+            service_date__month=month,
+            service_date__year=year,
+            payment_status='confirmed'
+        )
+
+        if services.exists():
+            staff_full_name = f"{staff.first_name} {staff.last_name}"
+
+            staff_total = 0
+
+            for service in services:
+                if y < bottom_margin + 50:
+                    new_page()
+                    p.setFont("Helvetica-Bold", 16)
+                    p.drawString(left_margin, y, "Staff Services (contd)")
+                    y -= 30
+                    draw_table_header(x_list, ["Staff Name", "Service Rendered", "Amount (₦)"], y)
+                    y -= 25
+
+                p.setFont("Helvetica", 11)
+                p.drawString(x_list[0] + 2, y, staff_full_name)
+                p.drawString(x_list[1] + 2, y, service.service_rendered or "N/A")
+                p.drawString(x_list[2] + 2, y, f"{service.amount:,.2f}")
+                y -= 18
+
+                staff_total += service.amount
+
+            # Staff Subtotal row
+            p.setFont("Helvetica-Bold", 11)
+            p.drawString(x_list[1] + 2, y, f"Subtotal for {staff_full_name}")
+            p.drawString(x_list[2] + 2, y, f"{staff_total:,.2f}")
+            y -= 25
+
+            total_income += staff_total
+
+    # Total Income
+    p.setStrokeColor(colors.black)
+    p.line(left_margin, y, right_margin, y)
+    y -= 20
+    p.setFont("Helvetica-Bold", 14)
+    p.drawString(left_margin, y, f"Total Income: ₦{total_income:,.2f}")
+    y -= 40
+
+    ## ------------------- Expenses Section -------------------
+    if y < bottom_margin + 100:
+        new_page()
+
+    p.setFont("Helvetica-Bold", 16)
+    p.drawString(left_margin, y, "Expenses")
+    y -= 30
+
+    # Table Column Positions for Expenses
+    x_expense_list = [left_margin, left_margin + 250, left_margin + 400]
+
+    draw_table_header(x_expense_list, ["Category", "Description", "Amount (₦)"], y)
+    y -= 25
+
+    expenses = Expense.objects.filter(date__month=month, date__year=year)
+    total_expenses = expenses.aggregate(total=Sum('amount'))['total'] or 0
+
+    if expenses.exists():
+        for expense in expenses:
+            if y < bottom_margin + 50:
+                new_page()
+                p.setFont("Helvetica-Bold", 16)
+                p.drawString(left_margin, y, "Expenses (contd)")
+                y -= 30
+                draw_table_header(x_expense_list, ["Category", "Description", "Amount (₦)"], y)
+                y -= 25
+
+            p.setFont("Helvetica", 11)
+            p.drawString(x_expense_list[0] + 2, y, expense.category.capitalize())
+            p.drawString(x_expense_list[1] + 2, y, (expense.description[:30] + '...') if len(expense.description) > 30 else expense.description)
+            p.drawString(x_expense_list[2] + 2, y, f"{expense.amount:,.2f}")
+            y -= 18
+    else:
+        p.setFont("Helvetica", 12)
+        p.drawString(left_margin + 10, y, "No expenses recorded.")
+        y -= 20
+
+    # Total Expenses
+    p.setStrokeColor(colors.black)
+    p.line(left_margin, y, right_margin, y)
+    y -= 20
+    p.setFont("Helvetica-Bold", 14)
+    p.drawString(left_margin, y, f"Total Expenses: ₦{total_expenses:,.2f}")
+    y -= 40
+
+    ## ------------------- Net Profit Section -------------------
+    if y < bottom_margin + 100:
+        new_page()
+
+    final_profit = total_income - total_expenses
+
+    p.setFont("Helvetica-Bold", 18)
+    p.drawString(left_margin, y, "Net Profit Summary")
+    y -= 25
+    p.setStrokeColor(colors.grey)
+    p.line(left_margin, y, right_margin, y)
+    y -= 30
+
+    p.setFont("Helvetica-Bold", 16)
+    if final_profit >= 0:
+        p.setFillColor(colors.green)
+    else:
+        p.setFillColor(colors.red)
+    p.drawString(left_margin, y, f"Net Profit: ₦{final_profit:,.2f}")
+    p.setFillColor(colors.black)
+
+    p.showPage()
+    p.save()
+
+    buffer.seek(0)
+    return FileResponse(buffer, as_attachment=True, filename=f"Monthly_Report_{calendar.month_name[month]}_{year}.pdf")
 
 def NotfoundPageView(request, exception):
     """ not found page """

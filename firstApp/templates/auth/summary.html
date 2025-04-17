@@ -1,0 +1,94 @@
+{% extends 'auth/maindash.html' %}
+{% load static %}
+
+{% block content %}
+<div class="main">
+    {% include 'auth/nav.html' %}
+    <main class="content px-4 py-3" style="max-height: 90vh; overflow-y: auto;">
+        <div class="mb-4 d-flex justify-content-between align-items-center">
+            <div>
+                <h2>Summary</h2>
+                <p class="text-muted">View total profit for selected month.</p>
+            </div>
+        
+            <div class="d-flex" style="max-width: 800px;">
+                <form method="get" class="d-flex me-2" action="">
+                    <select name="month" class="form-select me-2" required>
+                        <option value="" disabled selected>Select Month</option>
+                        {% for number, name in months %}
+                            <option value="{{ number }}" {% if selected_month == number %}selected{% endif %}>
+                                {{ name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+        
+                    <input type="number" name="year" class="form-control me-2" placeholder="Year" value="{{ selected_year }}" required>
+                    <button type="submit" class="btn btn-primary">Filter</button>
+                </form>
+        
+                <form method="get" action="{% url 'download_report' %}">
+                    <input type="hidden" name="month" value="{{ selected_month }}">
+                    <input type="hidden" name="year" value="{{ selected_year }}">
+                    <button type="submit" class="btn btn-outline-success">
+                        <i class="fa-solid fa-download me-1"></i> Download
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="row g-3">
+            <div class="col-md-4">
+                <div class="card shadow-sm p-3 rounded-4">
+                    <h5 class="text-muted">Total Income</h5>
+                    <h3 class="text-success">₦{{ total_income|floatformat:2 }}</h3>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card shadow-sm p-3 rounded-4">
+                    <h5 class="text-muted">Total Expenses</h5>
+                    <h3 class="text-danger">₦{{ total_expenses|floatformat:2 }}</h3>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card shadow-sm p-3 rounded-4">
+                    <h5 class="text-muted">Net Profit</h5>
+                    {% if profit >= 0 %}
+                        <h3 class="text-success">₦{{ profit|floatformat:2 }}</h3>
+                    {% else %}
+                        <h3 class="text-danger">₦{{ profit|floatformat:2 }}</h3>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-5">
+            <h4>Services Rendered ({{ selected_month }}/{{ selected_year }})</h4>
+            <ul class="list-group">
+                {% for service in services %}
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>{{ service.service_rendered }} (₦{{ service.amount|floatformat:2 }})</span>
+                        <small class="text-muted">{{ service.service_date }}</small>
+                    </li>
+                {% empty %}
+                    <li class="list-group-item text-center text-muted">No services rendered this month.</li>
+                {% endfor %}
+            </ul>
+
+            <h4 class="mt-4">Expenses ({{ selected_month }}/{{ selected_year }})</h4>
+            <ul class="list-group">
+                {% for expense in expenses %}
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>{{ expense.category }} - {{ expense.description }} (₦{{ expense.amount|floatformat:2 }})</span>
+                        <small class="text-muted">{{ expense.date|date:"M d, Y" }}</small>
+                    </li>
+                {% empty %}
+                    <li class="list-group-item text-center text-muted">No expenses recorded this month.</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+    </main>
+</div>
+{% endblock %}
