@@ -18,6 +18,7 @@ class CustomUserManager(BaseUserManager):
 
         return self.create_user(email, password, **extra_fields)
 
+
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     first_name = models.CharField(max_length=255, blank=True)
@@ -54,7 +55,6 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return f'{self.user.email} Profile'
-
 
 
 class ServiceRendered(models.Model):
@@ -122,7 +122,6 @@ class ServiceRendered(models.Model):
         ordering = ['-service_date']
 
 
-
 class Uniform(models.Model):
     uniform_date = models.DateField()  # Single field to store the full date
     uniform_type = models.CharField(max_length=100)
@@ -151,7 +150,6 @@ class Uniform(models.Model):
         ]
 
 
-
 class Expense(models.Model):
     # Categories for the expense (you can modify this list or make it dynamic)
     CATEGORY_CHOICES = [
@@ -178,7 +176,6 @@ class Expense(models.Model):
         verbose_name = 'Expense'
         verbose_name_plural = 'Expenses'
         ordering = ['-date']  # Ordering expenses by most recent date
-
 
 
 class Product(models.Model):
@@ -275,4 +272,17 @@ class SpaSessionBooking(models.Model):
 
     def __str__(self):
         return f"{self.service_type} ({self.status})"
+
+
+class ContactMessage(models.Model):
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+    email = models.EmailField()
+    subject = models.CharField(max_length=200)
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Message from {self.first_name} {self.last_name} ({self.email})"
+
 

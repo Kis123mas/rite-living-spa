@@ -206,7 +206,6 @@ class ReviewForm(forms.ModelForm):
         }
 
 
-
 class SpaSessionBookingForm(forms.ModelForm):
     class Meta:
         model = SpaSessionBooking
@@ -225,3 +224,32 @@ class SpaSessionBookingForm(forms.ModelForm):
         for field in self.fields.values():
             if not isinstance(field.widget, forms.Select):
                 field.widget.attrs['class'] = 'form-control'
+
+
+class ContactMessageForm(forms.ModelForm):
+    class Meta:
+        model = ContactMessage
+        fields = ['first_name', 'last_name', 'email', 'subject', 'message']
+        widgets = {
+            'first_name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter First Name',
+            }),
+            'last_name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter Last Name',
+            }),
+            'email': forms.EmailInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter Email',
+            }),
+            'subject': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter Subject',
+            }),
+            'message': forms.Textarea(attrs={
+                'class': 'form-control',
+                'placeholder': 'Type Message...',
+                'rows': 5,
+            }),
+        }

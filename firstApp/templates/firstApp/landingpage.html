@@ -11,7 +11,7 @@
                     <h1 class="text-uppercase text-white fw-semibold display-2 align-items-center" data-aos="fade-left">Welcome to Rite Living Spa</h1>
                     <h5 class="text-uppercase text-white mt-3 mb-4" data-aos="fade-right">your wellness center!</h5>
                     <div data-aos="fade-up" data-aos-delay="50">
-                        <a href="" class="btn btn-brand me-2">Book Appointment</a>
+                        <a href="{% url 'booksessionpage' %}" class="btn btn-brand me-2">Book Appointment</a>
                         <a href="{% url 'loginpage' %}" class="btn btn-light ms-2">Sign In</a>
                     </div>
                 </div>
@@ -71,75 +71,96 @@
      </section>
 
     <!-- SERVICES -->
-    <section id="services" class="section-padding border-top" data-aos="fade-down" data-aos-delay="50">
-    <div class="container">
-        <div class="row">
+    <section id="services" class="section-padding border-top py-5" data-aos="fade-down" data-aos-delay="50">
+        <div class="container">
+          
+          <div class="row mb-5">
             <div class="col-12 text-center">
-                <div class="section-title">
-                    <h1 class="display-4 fw-semibold">Awesome Services</h1>
-                    <div class="line"></div>
-                    <p>A spa is a wellness center offering massages, facials, and relaxation treatments to promote health and well-being.</p>
-                </div>
+              <h1 class="display-4 fw-semibold">Our Spa Services</h1>
+              <div class="border-bottom border-3 border-primary mx-auto" style="width: 60px;"></div>
+              <p class="mt-3">At Rite Living Spa, we offer a range of premium treatments designed to refresh your mind, body, and spirit.</p>
             </div>
+          </div>
+      
+          <div class="row g-4 text-center">
+            
+            <div class="col-lg-4 col-sm-6">
+              <div class="card h-100 border-0 shadow p-4">
+                <div class="card-body">
+                  <div class="text-primary mb-3 fs-1">
+                    <i class="ri-hand-heart-line"></i>
+                  </div>
+                  <h5 class="card-title mb-3">Massage Therapy</h5>
+                  <p class="card-text">Relax and rejuvenate with personalized massage techniques targeting stress and tension areas.</p>
+                </div>
+              </div>
+            </div>
+      
+            <div class="col-lg-4 col-sm-6">
+              <div class="card h-100 border-0 shadow p-4">
+                <div class="card-body">
+                  <div class="text-primary mb-3 fs-1">
+                    <i class="ri-drop-line"></i>
+                  </div>
+                  <h5 class="card-title mb-3">Aromatherapy</h5>
+                  <p class="card-text">Enhance your mood and wellness with essential oil treatments that soothe the senses.</p>
+                </div>
+              </div>
+            </div>
+      
+            <div class="col-lg-4 col-sm-6">
+              <div class="card h-100 border-0 shadow p-4">
+                <div class="card-body">
+                  <div class="text-primary mb-3 fs-1">
+                    <i class="ri-leaf-line"></i>
+                  </div>
+                  <h5 class="card-title mb-3">Facial Treatments</h5>
+                  <p class="card-text">Revitalize your skin with deep-cleansing, hydrating, and anti-aging facial therapies.</p>
+                </div>
+              </div>
+            </div>
+      
+            <div class="col-lg-4 col-sm-6">
+              <div class="card h-100 border-0 shadow p-4">
+                <div class="card-body">
+                  <div class="text-primary mb-3 fs-1">
+                    <i class="ri-spa-line"></i>
+                  </div>
+                  <h5 class="card-title mb-3">Body Scrubs</h5>
+                  <p class="card-text">Exfoliate and nourish your skin with our luxurious body scrub treatments for a radiant glow.</p>
+                </div>
+              </div>
+            </div>
+      
+            <div class="col-lg-4 col-sm-6">
+              <div class="card h-100 border-0 shadow p-4">
+                <div class="card-body">
+                  <div class="text-primary mb-3 fs-1">
+                    <i class="ri-hotel-bed-line"></i>
+                  </div>
+                  <h5 class="card-title mb-3">Hot Stone Therapy</h5>
+                  <p class="card-text">Release deep muscle tension and improve circulation with our signature hot stone sessions.</p>
+                </div>
+              </div>
+            </div>
+      
+            <div class="col-lg-4 col-sm-6">
+              <div class="card h-100 border-0 shadow p-4">
+                <div class="card-body">
+                  <div class="text-primary mb-3 fs-1">
+                    <i class="ri-magic-line"></i>
+                  </div>
+                  <h5 class="card-title mb-3">Detox Treatments</h5>
+                  <p class="card-text">Cleanse your body inside and out with natural detoxifying rituals tailored to your needs.</p>
+                </div>
+              </div>
+            </div>
+      
+          </div>
+      
         </div>
-        <div class="row g-4 text-center">
-            <div class="col-lg-4 col-sm-6">
-                <div class="service theme-shadow p-lg-5 p-4">
-                    <div class="iconbox">
-                        <i class="ri-stack-fill"></i>
-                    </div>
-                    <h5 class="mt-4 mb-3">Service one</h5>
-                    <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quod, enim.</p>
-                </div>
-            </div>
-            <div class="col-lg-4 col-sm-6">
-                <div class="service theme-shadow p-lg-5 p-4">
-                    <div class="iconbox">
-                        <i class="ri-stack-fill"></i>
-                    </div>
-                    <h5 class="mt-4 mb-3">Service one</h5>
-                    <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quod, enim.</p>
-                </div>
-            </div>
-            <div class="col-lg-4 col-sm-6">
-                <div class="service theme-shadow p-lg-5 p-4">
-                    <div class="iconbox">
-                        <i class="ri-stack-fill"></i>
-                    </div>
-                    <h5 class="mt-4 mb-3">Service one</h5>
-                    <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quod, enim.</p>
-                </div>
-            </div>
-            <div class="col-lg-4 col-sm-6">
-                <div class="service theme-shadow p-lg-5 p-4">
-                    <div class="iconbox">
-                        <i class="ri-stack-fill"></i>
-                    </div>
-                    <h5 class="mt-4 mb-3">Service one</h5>
-                    <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quod, enim.</p>
-                </div>
-            </div>
-            <div class="col-lg-4 col-sm-6">
-                <div class="service theme-shadow p-lg-5 p-4">
-                    <div class="iconbox">
-                        <i class="ri-stack-fill"></i>
-                    </div>
-                    <h5 class="mt-4 mb-3">Service one</h5>
-                    <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quod, enim.</p>
-                </div>
-            </div>
-            <div class="col-lg-4 col-sm-6">
-                <div class="service theme-shadow p-lg-5 p-4">
-                    <div class="iconbox">
-                        <i class="ri-stack-fill"></i>
-                    </div>
-                    <h5 class="mt-4 mb-3">Service one</h5>
-                    <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quod, enim.</p>
-                </div>
-            </div>
-        </div>
-    </div>
     </section>
+      
 
     <!-- COUNTER -->
     <section id="counter" class="section-padding" data-aos="fade-down" data-aos-delay="50">
@@ -164,72 +185,7 @@
         </div>
     </div>
     </section>
-
-    <!-- PRODUCTS -->
-    <section id="product" class="section-padding" data-aos="fade-down" data-aos-delay="50">
-    <div class="container">
-        <div class="row">
-            <div class="col-12 text-center">
-                <div class="section-title">
-                    <h1 class="display-4 fw-semibold">Available Products</h1>
-                    <div class="line"></div>
-                    <p>A spa is a wellness center offering massages, facials, and relaxation treatments to promote health and well-being.</p>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-4">
-                <div class="product-item image-zoom mt-4">
-                    <div class="image-zoom-wrapper">
-                        <img src="{% static 'firstApp/images/heropicture.jpg' %}" alt="product-item" />
-                    </div>
-                    <a href="#" data-fancybox="gallery" class="iconbox"><i class="ri-shopping-cart-2-line"></i>
-                    </a>
-                </div>
-                <div class="product-item image-zoom mt-4">
-                    <div class="image-zoom-wrapper">
-                        <img src="{% static 'firstApp/images/heropicture.jpg' %}" alt="product-item" />
-                    </div>
-                    <a href="#" data-fancybox="gallery" class="iconbox"><i class="ri-shopping-cart-2-line"></i>
-                    </a>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="product-item image-zoom mt-4">
-                    <div class="image-zoom-wrapper">
-                        <img src="{% static 'firstApp/images/heropicture.jpg' %}" alt="product-item" />
-                    </div>
-                    <a href="#" data-fancybox="gallery" class="iconbox"><i class="ri-shopping-cart-2-line"></i>
-                    </a>
-                </div>
-                <div class="product-item image-zoom mt-4">
-                    <div class="image-zoom-wrapper">
-                        <img src="{% static 'firstApp/images/heropicture.jpg' %}" alt="product-item" />
-                    </div>
-                    <a href="#" data-fancybox="gallery" class="iconbox"><i class="ri-shopping-cart-2-line"></i>
-                    </a>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="product-item image-zoom mt-4">
-                    <div class="image-zoom-wrapper">
-                        <img src="{% static 'firstApp/images/heropicture.jpg' %}" alt="product-item" />
-                    </div>
-                    <a href="#" data-fancybox="gallery" class="iconbox"><i class="ri-shopping-cart-2-line"></i>
-                    </a>
-                </div>
-                <div class="product-item image-zoom mt-4">
-                    <div class="image-zoom-wrapper">
-                        <img src="{% static 'firstApp/images/heropicture.jpg' %}" alt="product-item" />
-                    </div>
-                    <a href="#" data-fancybox="gallery" class="iconbox"><i class="ri-shopping-cart-2-line"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-    </section>
-
+    
     <!-- REVIEW -->
     <section id="reviews" class="section-padding bg-light" data-aos="fade-down" data-aos-delay="50">
         <div class="container">
@@ -257,11 +213,11 @@
                                 <i class="ri-star-fill"></i>
                             </div>
                             <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet excepturi aliquam soluta?</p>
-                            <div class="review-person d-flex justify-content-center align-items-center mt-4">
+                            <div class="review-person d-flex align-items-center justify-content-center gap-3 mt-4">
                                 <img class="rounded-circle img-circle" src="{% static 'firstApp/images/heropicture.jpg' %}" alt="">
-                                <div class="ms-3">
-                                    <h5>Person One</h5>
-                                    <small>Occupation</small>
+                                <div class="text-start">
+                                  <h6 class="mb-0 fw-semibold">Person One</h6>
+                                  <small class="text-muted">Occupation</small>
                                 </div>
                             </div>
                         </div>
@@ -278,11 +234,11 @@
                                 <i class="ri-star-fill"></i>
                             </div>
                             <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet excepturi aliquam soluta?</p>
-                            <div class="review-person d-flex justify-content-center align-items-center mt-4">
+                            <div class="review-person d-flex align-items-center justify-content-center gap-3 mt-4">
                                 <img class="rounded-circle img-circle" src="{% static 'firstApp/images/heropicture.jpg' %}" alt="">
-                                <div class="ms-3">
-                                    <h5>Person Two</h5>
-                                    <small>Occupation</small>
+                                <div class="text-start">
+                                  <h6 class="mb-0 fw-semibold">Person One</h6>
+                                  <small class="text-muted">Occupation</small>
                                 </div>
                             </div>
                         </div>
@@ -300,10 +256,12 @@
                             </div>
                             <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet excepturi aliquam soluta?</p>
                             <div class="review-person d-flex justify-content-center align-items-center mt-4">
-                                <img class="rounded-circle img-circle" src="{% static 'firstApp/images/heropicture.jpg' %}" alt="">
-                                <div class="ms-3">
-                                    <h5>Person Three</h5>
-                                    <small>Occupation</small>
+                                <div class="review-person d-flex align-items-center justify-content-center gap-3 mt-4">
+                                    <img class="rounded-circle img-circle" src="{% static 'firstApp/images/heropicture.jpg' %}" alt="">
+                                    <div class="text-start">
+                                      <h6 class="mb-0 fw-semibold">Person One</h6>
+                                      <small class="text-muted">Occupation</small>
+                                    </div>
                                 </div>
                             </div>
                         </div>

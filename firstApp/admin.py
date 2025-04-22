@@ -118,7 +118,6 @@ class ReviewAdmin(admin.ModelAdmin):
     list_filter = ('rating', 'created_at')
 
 
-
 @admin.register(SpaSessionBooking)
 class SpaSessionBookingAdmin(admin.ModelAdmin):
     list_display = (
@@ -152,3 +151,10 @@ class SpaSessionBookingAdmin(admin.ModelAdmin):
             'fields': ('status', 'created_at')
         }),
     )
+
+
+@admin.register(ContactMessage)
+class ContactMessageAdmin(admin.ModelAdmin):
+    list_display = ('first_name', 'last_name', 'email', 'subject', 'created_at')
+    search_fields = ('first_name', 'last_name', 'email', 'subject')
+    list_filter = ('created_at',)

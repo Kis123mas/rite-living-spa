@@ -18,17 +18,23 @@ from datetime import datetime, timedelta, date
 from django.db.models import Count, Sum
 from django.http import JsonResponse
 from django.contrib.auth import get_user_model
+from .decorators import *
 
 
 
 def LandingPageView(request):
     """ landing page """
+    if request.user.is_authenticated:
+        messages.info(request, "You are already logged in.")
+        return redirect(request.META.get('HTTP_REFERER', 'landingpage'))  # if no referer, fallback to home
+
     return render(request, 'firstApp/landingpage.html')
 
 
 
 def RegisterPageView(request):
     """Register a new user using a custom form"""
+
     if request.method == 'POST':
         form = CustomUserRegistrationForm(request.POST)
         if form.is_valid():
@@ -77,7 +83,7 @@ def logoutView(request):
     logout(request)
     return redirect('landingpage')
 
-
+@login_required(login_url='loginpage')
 def CalenderPageView(request):
     """ Calendar page view that renders a calendar with dates and a uniform form """
     
@@ -176,7 +182,8 @@ def CalenderPageView(request):
     return render(request, 'auth/calender.html', context)
 
 
-
+@login_required(login_url='loginpage')
+@admin_and_secretary_required
 def RecordservicePageView(request):
     if request.method == 'POST':
         form = ServiceRenderedForm(request.POST)
@@ -210,6 +217,7 @@ def RecordservicePageView(request):
     return render(request, 'auth/recordservice.html', context)
 
 
+@login_required(login_url='loginpage')
 def ProfilePageView(request):
     """ Profile page """
 
@@ -254,6 +262,7 @@ def ProfilePageView(request):
     return render(request, 'auth/profile.html', context)
 
 
+@login_required(login_url='loginpage')
 def ProductPage(request):
     if request.method == 'POST':
         form = ProductForm(request.POST, request.FILES)
@@ -285,7 +294,8 @@ def ProductPage(request):
     return render(request, 'auth/product.html',context)
 
 
-
+@login_required(login_url='loginpage')
+@admin_and_secretary_required
 def delete_product(request, product_id):
     if request.method == 'POST':
         product = get_object_or_404(Product, id=product_id)
@@ -293,6 +303,8 @@ def delete_product(request, product_id):
     return redirect('productspage')
 
 
+@login_required(login_url='loginpage')
+@admin_and_secretary_required
 def UpdateOrderStatus(request, order_id):
     if request.method == 'POST':
         order = get_object_or_404(Order, id=order_id)
@@ -305,7 +317,8 @@ def UpdateOrderStatus(request, order_id):
     return redirect(request.META.get('HTTP_REFERER', 'orders_list'))
 
 
-@login_required
+@login_required(login_url='loginpage')
+@admin_and_secretary_required
 def send_order_message(request):
     if request.method == "POST":
         order_id = request.POST.get("order_id")
@@ -320,6 +333,8 @@ def send_order_message(request):
     return redirect(request.META.get('HTTP_REFERER', '/'))
 
 
+@login_required(login_url='loginpage')
+@admin_and_secretary_required
 def DeleteOrder(request, order_id):
     order = get_object_or_404(Order, id=order_id)
     if request.method == "POST":
@@ -328,7 +343,7 @@ def DeleteOrder(request, order_id):
     return redirect('dashboardpage')
 
 
-@login_required
+@login_required(login_url='loginpage')
 def UpdateProfileView(request):
     if request.method == 'POST':
         profile = request.user.profile
@@ -366,7 +381,8 @@ def UpdateProfileView(request):
         return redirect('profilepage') 
 
 
-
+@login_required(login_url='loginpage')
+@admin_and_secretary_required
 def RecordexpensesPageView(request):
     """ Expense recording page """
     if request.method == 'POST':
@@ -424,6 +440,8 @@ def RecordexpensesPageView(request):
     return render(request, 'auth/expenses.html', context)
 
 
+@login_required(login_url='loginpage')
+@admin_and_secretary_required
 def CalculatePageView(request):
     # Get month/year from GET params or use current month/year as default
     month = int(request.GET.get('month', date.today().month))
@@ -489,6 +507,8 @@ def CalculatePageView(request):
     return render(request, 'auth/calculate.html', context)
 
 
+@login_required(login_url='loginpage')
+@admin_and_secretary_required
 def get_staff_jobs(request, staff_id):
     month = int(request.GET.get('month', date.today().month))
     year = int(request.GET.get('year', date.today().year))
@@ -630,7 +650,7 @@ def StorePageView(request):
 
 
 
-@login_required
+@login_required(login_url='loginpage')
 def PlaceOrderView(request):
     if request.method == 'POST':
         product_id = request.POST.get('product_id')
@@ -647,7 +667,7 @@ def PlaceOrderView(request):
     return redirect('dashboardpage')
 
 
-
+@login_required(login_url='loginpage')
 def BookPageView(request):
     user = request.user
     if request.method == 'POST':
@@ -685,6 +705,7 @@ def BookPageView(request):
 
 
 @login_required(login_url='loginpage')
+@admin_and_secretary_required
 def UpdateBookingStatus(request, booking_id):
     booking = get_object_or_404(SpaSessionBooking, id=booking_id)
 
@@ -703,6 +724,7 @@ def UpdateBookingStatus(request, booking_id):
 
 
 @login_required(login_url='loginpage')
+@admin_and_secretary_required
 def DeleteBooking(request, booking_id):
     booking = get_object_or_404(SpaSessionBooking, id=booking_id)
 
@@ -715,6 +737,7 @@ def DeleteBooking(request, booking_id):
 
 
 
+@login_required(login_url='loginpage')
 def UserReviewPageView(request):
     """ review page """
     user = request.user
@@ -751,32 +774,8 @@ def UserReviewPageView(request):
     return render(request, 'auth/review.html', context)
 
 
-def AboutPageView(request):
-    """ about page """
-    return render(request, 'firstApp/aboutpage.html')
-
-
-def ServicePageView(request):
-    """ service page """
-    
-    return render(request, 'firstApp/servicepage.html')
-
-
-def ProductPageView(request):
-    """ products page """
-    return render(request, 'firstApp/productpage.html')
-
-
-def ReviewPageView(request):
-    """ review page """
-    return render(request, 'firstApp/reviewpage.html')
-
-
-def ContactPageView(request):
-    """ contact page """
-    return render(request, 'firstApp/contactpage.html')
-
-
+@login_required(login_url='loginpage')
+@admin_required
 def StaffPageView(request):
     """ staff page from admin view """
     staff_users = CustomUser.objects.filter(is_not_secretary=True)
@@ -786,7 +785,8 @@ def StaffPageView(request):
     })
 
 
-
+@login_required(login_url='loginpage')
+@admin_required
 def UsersPageView(request):
     """ User page from admin view, with search functionality """
     query = request.GET.get('q', '')  # Get the search query
@@ -805,6 +805,8 @@ def UsersPageView(request):
     })
 
 
+@login_required(login_url='loginpage')
+@admin_required
 def EditUserView(request, user_id):
     """ Handle editing user information """
     user = get_object_or_404(CustomUser, id=user_id)
@@ -825,6 +827,8 @@ def EditUserView(request, user_id):
     return redirect('userpage')
 
 
+@login_required(login_url='loginpage')
+@admin_required
 def delete_user(request, user_id):
     """ Delete a user """
     if request.method == 'POST':
@@ -833,6 +837,8 @@ def delete_user(request, user_id):
     return redirect('userpage')
 
 
+@login_required(login_url='loginpage')
+@admin_and_secretary_required
 def profit_summary(request):
     # Get month and year from GET params, default to current month/year
     month = request.GET.get('month')
@@ -887,6 +893,9 @@ def profit_summary(request):
     }
     return render(request, 'auth/summary.html', context)
 
+
+@login_required(login_url='loginpage')
+@not_secretary_required
 def JobsPage(request):
     """ Staff job page with month/year filtering """
 
@@ -925,6 +934,8 @@ def JobsPage(request):
     return render(request, 'auth/jobs.html', context)
 
 
+@login_required(login_url='loginpage')
+@admin_and_secretary_required
 def download_report(request):
     month = request.GET.get('month')
     year = request.GET.get('year')
@@ -1097,6 +1108,38 @@ def download_report(request):
     buffer.seek(0)
     return FileResponse(buffer, as_attachment=True, filename=f"Monthly_Report_{calendar.month_name[month]}_{year}.pdf")
 
-def NotfoundPageView(request, exception):
-    """ not found page """
-    return render(request, 'auth/notfound.html', status=404)
+
+
+def AboutPageView(request):
+    """ about page """
+    return render(request, 'firstApp/aboutpage.html')
+
+
+def ServicePageView(request):
+    """ service page """
+    
+    return render(request, 'firstApp/servicepage.html')
+
+
+def ReviewPageView(request):
+    """ review page """
+    reviews = Review.objects.all().order_by('-created_at')
+    stars = range(1, 6)  # range from 1 to 5
+    return render(request, 'firstApp/reviewpage.html', {'reviews': reviews, 'stars': stars})
+
+def ContactPageView(request):
+    """ contact page """
+    if request.method == 'POST':
+        form = ContactMessageForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Your message has been sent successfully!')
+            return redirect('contactpage')  # Or wherever you want to redirect
+    else:
+        form = ContactMessageForm()
+
+    return render(request, 'firstApp/contactpage.html', {'form': form})
+
+
+def custom_404_view(request, exception=None):
+    return render(request, 'firstApp/404.html')

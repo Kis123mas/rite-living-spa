@@ -231,7 +231,13 @@
                 <tbody>
                   {% for booking in all_bookings %}
                   <tr>
-                    <td>{{ booking.user.first_name }} {{ booking.user.last_name }}</td>
+                    <td>
+                      {% if booking.user.first_name or booking.user.last_name %}
+                        {{ booking.user.first_name }} {{ booking.user.last_name }}
+                      {% else %}
+                        {{ booking.user.email }}
+                      {% endif %}
+                    </td>
                     <td>{{ booking.session_type }}</td>
                     <td>{{ booking.service_type }}</td>
                     <td>{{ booking.preferred_date }}</td>

@@ -63,9 +63,6 @@
                         <a class="nav-link {% if request.resolver_match.url_name == 'servicepage' %}active{% endif %}" href="{% url 'servicepage' %}">Services</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {% if request.resolver_match.url_name == 'productpage' %}active{% endif %}" href="{% url 'productpage' %}">Products</a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link {% if request.resolver_match.url_name == 'reviewpage' %}active{% endif %}" href="{% url 'reviewpage' %}">Review</a>
                     </li>
                     <li class="nav-item">
@@ -84,74 +81,60 @@
 
 
     <!-- FOOTER -->
-    <footer class="bg-dark" data-aos="fade-down" data-aos-delay="50">
-        <div class="footer-top">
-            <div class="container">
-                <div class="row gy-5">
-                    <div class="col-lg-3 col-sm-6">
-                        <a href="">
-                            <img src="{%static 'firstApp/images/logo.png' %}" alt="logo" width="70" height="70"/>
-                        </a>
-                            <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. A, totam?</p>
-                            <div class="social-icons">
-                                <a href="">
-                                    <i class="ri-whatsapp-line"></i>
-                                </a>
-                                <a href="">
-                                    <i class="ri-youtube-line"></i>
-                                </a>
-                                <a href="">
-                                    <i class="ri-instagram-line"></i>
-                                </a>
-                                <a href="">
-                                    <i class="ri-facebook-circle-line"></i>
-                                </a>
-                            </div>
-                    </div>
-
-                    <div class="col-lg-3 col-m-6">
-                        <h5 class="mb-0 text-white"> SERVICES</h5>
-                        <div class="line"></div>
-                        <ul>
-                            <li><a href="">serice one</a></li>
-                            <li><a href="">serice two</a></li>
-                            <li><a href="">serice three</a></li>
-                            <li><a href="">serice four</a></li>
-                        </ul>
-                    </div>
-                    <div class="col-lg-3 col-m-6">
-                        <h5 class="mb-0 text-white">ABOUT</h5>
-                        <div class="line"></div>
-                        <ul>
-                            <li><a href="">about one</a></li>
-                            <li><a href="">about two</a></li>
-                            <li><a href="">about three</a></li>
-                            <li><a href="">about four</a></li>
-                        </ul>
-                    </div>
-                    <div class="col-lg-3 col-m-6">
-                        <h5 class="mb-0 text-white"> CONTACT</h5>
-                        <div class="line"></div>
-                        <ul>
-                            <li><a href="">serice one</a></li>
-                            <li><a href="">serice two</a></li>
-                            <li><a href="">serice three</a></li>
-                            <li><a href="">serice four</a></li>
-                        </ul>
-                    </div>
-                </div>
+    <footer class="bg-dark text-light pt-5" data-aos="fade-down" data-aos-delay="50">
+        <div class="container">
+          <div class="row gy-4 align-items-start">
+            <div class="col-lg-3 col-sm-6">
+              <div class="d-flex flex-column align-items-start">
+                <a href="/" class="d-inline-block mb-3">
+                  <img src="{% static 'firstApp/images/logo.png' %}" alt="Rite Living Spa Logo" width="70" height="70">
+                </a>
+                <p class="small mb-3">
+                  Experience true relaxation and wellness at Rite Living Spa. Your journey to rejuvenation starts here.
+                </p>
+              </div>
             </div>
-        </div>
-        <div class="footer-bottom">
-            <div class="container">
-                <div class="row g-4 justify-content-between">
-                    <div class="col-auto">
-                        <p class="mb-0">@ Copyright Rite Living Spa. All Right Reserved</p>
-                    </div>
-                </div>
+      
+            <div class="col-lg-3 col-sm-6">
+              <h5 class="text-white mb-4">Services</h5>
+              <ul class="list-unstyled">
+                <li class="mb-2"><a href="#" class="text-light text-decoration-none small">Massage Therapy</a></li>
+                <li class="mb-2"><a href="#" class="text-light text-decoration-none small">Facial Treatments</a></li>
+                <li class="mb-2"><a href="#" class="text-light text-decoration-none small">Body Scrubs</a></li>
+                <li class="mb-2"><a href="#" class="text-light text-decoration-none small">Aromatherapy</a></li>
+              </ul>
             </div>
+      
+            <div class="col-lg-3 col-sm-6">
+              <h5 class="text-white mb-4">About Us</h5>
+              <ul class="list-unstyled">
+                <li class="mb-2"><a href="#" class="text-light text-decoration-none small">Our Story</a></li>
+                <li class="mb-2"><a href="#" class="text-light text-decoration-none small">Our Team</a></li>
+                <li class="mb-2"><a href="#" class="text-light text-decoration-none small">Testimonials</a></li>
+                <li class="mb-2"><a href="#" class="text-light text-decoration-none small">Careers</a></li>
+              </ul>
+            </div>
+      
+            <div class="col-lg-3 col-sm-6">
+              <h5 class="text-white mb-4">Contact</h5>
+              <ul class="list-unstyled">
+                <li class="mb-2"><a href="#" class="text-light text-decoration-none small">info@ritelivingspa.com</a></li>
+                <li class="mb-2"><a href="#" class="text-light text-decoration-none small">+234 800 123 4567</a></li>
+                <li class="mb-2"><a href="#" class="text-light text-decoration-none small">123 Wellness Street, Lagos</a></li>
+                <li class="mb-2"><a href="#" class="text-light text-decoration-none small">Contact Form</a></li>
+              </ul>
+            </div>
+          </div>
+      
+          <hr class="border-light my-4">
+      
+          <div class="d-flex flex-column flex-md-row justify-content-between align-items-center pb-3">
+            <p class="mb-2 mb-md-0 small">&copy; 2025 Rite Living Spa. All Rights Reserved.</p>
+            <p class="mb-0 small">Designed with ❤️ by Kismas</p>
+          </div>
         </div>
     </footer>
+      
 
     <!-- sticky social media -->
     <section class="sticky-social-icon">
