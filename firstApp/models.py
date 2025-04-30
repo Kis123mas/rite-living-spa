@@ -79,14 +79,48 @@ class ServiceRendered(models.Model):
 
     # Type of service (Solo or Contract)
     SERVICE_TYPE_RENDERED = [
-        ('Massage Therapy', 'Massage Therapy'),
-        ('Facial Treatments', 'Facial Treatments'),
-        ('Aromatherapy', 'Aromatherapy'),
-        ('Body Scrubs', 'Body Scrubs'),
-        ('Steam & Sauna', 'Steam & Sauna'),
-        ('Nail Care', 'Nail Care'),
+    # Massage Therapy
+        ('Swedish massage - 50 minutes - ₦25,000.00', 'Swedish massage - 50 minutes - ₦25,000.00'),
+        ('Deep tissue massage - 1 hour - ₦30,000.00', 'Deep tissue massage - 1 hour - ₦30,000.00'),
+        ('Hot stone massage - 1 hour - ₦35,000.00', 'Hot stone massage - 1 hour - ₦35,000.00'),
+        ('Aroma therapy massage - 1 hour - ₦40,000.00', 'Aroma therapy massage - 1 hour - ₦40,000.00'),
+        ('Couple massage with host stone - 1 hour - ₦70,000.00', 'Couple massage with host stone - 1 hour - ₦70,000.00'),
+        ('Feet/reflexology - 20 minutes - ₦15,000.00', 'Feet/reflexology - 20 minutes - ₦15,000.00'),
+        ('Back massage - 20 minutes - ₦15,000.00', 'Back massage - 20 minutes - ₦15,000.00'),
+        ('Kid massage - 20 minutes - ₦10,000.00', 'Kid massage - 20 minutes - ₦10,000.00'),
+
+        # Facial Treatment
+        ('Classic facial - 60 minutes - ₦20,000.00', 'Classic facial - 60 minutes - ₦20,000.00'),
+        ('Glowing facial - 60 minutes - ₦25,000.00', 'Glowing facial - 60 minutes - ₦25,000.00'),
+        ('RF facial - 75 minutes - ₦30,000.00', 'RF facial - 75 minutes - ₦30,000.00'),
+        ('Anti-aging facial - 90 minutes - ₦30,000.00', 'Anti-aging facial - 90 minutes - ₦30,000.00'),
+        ('Acne treatment facial - 60 minutes - ₦30,000.00', 'Acne treatment facial - 60 minutes - ₦30,000.00'),
+
+        # Body Treatment
+        ('Sugar body scrub - 60 minutes - ₦40,000.00', 'Sugar body scrub - 60 minutes - ₦40,000.00'),
+        ('Moroccan body scrub - 60 minutes - ₦50,000.00', 'Moroccan body scrub - 60 minutes - ₦50,000.00'),
+        ('Teeth whitening - 60 minutes - ₦30,000.00', 'Teeth whitening - 60 minutes - ₦30,000.00'),
+
+        # Body Wax
+        ('Full body wax - ₦60,000.00', 'Full body wax - ₦60,000.00'),
+        ('Full leg wax - ₦20,000.00', 'Full leg wax - ₦20,000.00'),
+        ('Half leg wax - ₦10,000.00', 'Half leg wax - ₦10,000.00'),
+        ('Full hand wax - ₦20,000.00', 'Full hand wax - ₦20,000.00'),
+        ('Half hand wax - ₦10,000.00', 'Half hand wax - ₦10,000.00'),
+        ('Under arm wax - ₦10,000.00', 'Under arm wax - ₦10,000.00'),
+        ('Brazilian wax (Bikini) - ₦20,000.00', 'Brazilian wax (Bikini) - ₦20,000.00'),
+        ('Chin wax - ₦3,000.00', 'Chin wax - ₦3,000.00'),
+        ('Upper lip wax - ₦3,000.00', 'Upper lip wax - ₦3,000.00'),
+        ('Eye brow waxing - ₦8,000.00', 'Eye brow waxing - ₦8,000.00'),
+
+        # Others
+        ('Vagina steam - ₦15,000.00', 'Vagina steam - ₦15,000.00'),
+        ('Sauna - ₦10,000.00', 'Sauna - ₦10,000.00'),
+        ('Pedicure & manicure - ₦15,000.00', 'Pedicure & manicure - ₦15,000.00'),
+        ('Steam - ₦10,000.00', 'Steam - ₦10,000.00'),
     ]
-    service_rendered = models.CharField(max_length=20, null=True, blank=True, choices=SERVICE_TYPE_RENDERED)
+
+    service_rendered = models.CharField(max_length=200, null=True, blank=True, choices=SERVICE_TYPE_RENDERED)
     
     # Date when the service was rendered
     service_date = models.DateField(auto_now_add=True)
@@ -242,10 +276,44 @@ class SpaSessionBooking(models.Model):
     ]
 
     SERVICE_TYPE_CHOICES = [
-        ('massage', 'Relaxing Massage'),
-        ('facial', 'Rejuvenating Facial'),
-        ('aromatic', 'Aromatic Oil Therapy'),
-        ('bath', 'Lavender Bath Soak'),
+        ('Swedish massage - 50 minutes - ₦25,000.00', 'Swedish massage - 50 minutes - ₦25,000.00'),
+        ('Deep tissue massage - 1 hour - ₦30,000.00', 'Deep tissue massage - 1 hour - ₦30,000.00'),
+        ('Hot stone massage - 1 hour - ₦35,000.00', 'Hot stone massage - 1 hour - ₦35,000.00'),
+        ('Aroma therapy massage - 1 hour - ₦40,000.00', 'Aroma therapy massage - 1 hour - ₦40,000.00'),
+        ('Couple massage with host stone - 1 hour - ₦70,000.00', 'Couple massage with host stone - 1 hour - ₦70,000.00'),
+        ('Feet/reflexology - 20 minutes - ₦15,000.00', 'Feet/reflexology - 20 minutes - ₦15,000.00'),
+        ('Back massage - 20 minutes - ₦15,000.00', 'Back massage - 20 minutes - ₦15,000.00'),
+        ('Kid massage - 20 minutes - ₦10,000.00', 'Kid massage - 20 minutes - ₦10,000.00'),
+
+        # Facial Treatment
+        ('Classic facial - 60 minutes - ₦20,000.00', 'Classic facial - 60 minutes - ₦20,000.00'),
+        ('Glowing facial - 60 minutes - ₦25,000.00', 'Glowing facial - 60 minutes - ₦25,000.00'),
+        ('RF facial - 75 minutes - ₦30,000.00', 'RF facial - 75 minutes - ₦30,000.00'),
+        ('Anti-aging facial - 90 minutes - ₦30,000.00', 'Anti-aging facial - 90 minutes - ₦30,000.00'),
+        ('Acne treatment facial - 60 minutes - ₦30,000.00', 'Acne treatment facial - 60 minutes - ₦30,000.00'),
+
+        # Body Treatment
+        ('Sugar body scrub - 60 minutes - ₦40,000.00', 'Sugar body scrub - 60 minutes - ₦40,000.00'),
+        ('Moroccan body scrub - 60 minutes - ₦50,000.00', 'Moroccan body scrub - 60 minutes - ₦50,000.00'),
+        ('Teeth whitening - 60 minutes - ₦30,000.00', 'Teeth whitening - 60 minutes - ₦30,000.00'),
+
+        # Body Wax
+        ('Full body wax - ₦60,000.00', 'Full body wax - ₦60,000.00'),
+        ('Full leg wax - ₦20,000.00', 'Full leg wax - ₦20,000.00'),
+        ('Half leg wax - ₦10,000.00', 'Half leg wax - ₦10,000.00'),
+        ('Full hand wax - ₦20,000.00', 'Full hand wax - ₦20,000.00'),
+        ('Half hand wax - ₦10,000.00', 'Half hand wax - ₦10,000.00'),
+        ('Under arm wax - ₦10,000.00', 'Under arm wax - ₦10,000.00'),
+        ('Brazilian wax (Bikini) - ₦20,000.00', 'Brazilian wax (Bikini) - ₦20,000.00'),
+        ('Chin wax - ₦3,000.00', 'Chin wax - ₦3,000.00'),
+        ('Upper lip wax - ₦3,000.00', 'Upper lip wax - ₦3,000.00'),
+        ('Eye brow waxing - ₦8,000.00', 'Eye brow waxing - ₦8,000.00'),
+
+        # Others
+        ('Vagina steam - ₦15,000.00', 'Vagina steam - ₦15,000.00'),
+        ('Sauna - ₦10,000.00', 'Sauna - ₦10,000.00'),
+        ('Pedicure & manicure - ₦15,000.00', 'Pedicure & manicure - ₦15,000.00'),
+        ('Steam - ₦10,000.00', 'Steam - ₦10,000.00'),
     ]
 
     STATUS_CHOICES = [
@@ -256,7 +324,7 @@ class SpaSessionBooking(models.Model):
 
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='spa_bookings')
     session_type = models.CharField(max_length=10, choices=SESSION_TYPE_CHOICES, null=True, blank=True)
-    service_type = models.CharField(max_length=20, choices=SERVICE_TYPE_CHOICES, null=True, blank=True)
+    service_type = models.CharField(max_length=200, choices=SERVICE_TYPE_CHOICES, null=True, blank=True)
     preferred_date = models.DateField(null=True, blank=True)
     preferred_time = models.TimeField(null=True, blank=True)
     message = models.TextField(null=True, blank=True)
