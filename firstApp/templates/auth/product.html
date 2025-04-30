@@ -41,7 +41,7 @@
                             <div>
                                 <h5>{{ product.name }}</h5>
                                 <p>{{ product.description }}</p>
-                                <p><strong>Price:</strong> ${{ product.price }}</p>
+                                <p><strong>Price:</strong> ₦{{ product.price }}</p>
                                 {% if product.uploaded_file %}
                                 {% endif %}
                                 <small class="text-muted">Uploaded on {{ product.created_at }}</small>
@@ -67,5 +67,54 @@
         </div>
     </div>
 </div>
+
+<!-- Success Modal -->
+{% if messages %}
+<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content shadow-lg rounded-4">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title">Success</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                {% for message in messages %}
+                <p class="mb-0">{{ message }}</p>
+                {% endfor %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" data-bs-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Blur Background -->
+<div id="blur-overlay" style="
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  backdrop-filter: blur(5px);
+  background: rgba(0,0,0,0.3);
+  z-index: 1040;
+"></div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const modalEl = document.getElementById('successModal');
+        const modal = new bootstrap.Modal(modalEl);
+        const blurOverlay = document.getElementById('blur-overlay');
+
+        modal.show();
+
+        modalEl.addEventListener('hidden.bs.modal', function () {
+            blurOverlay.remove();
+        });
+    });
+</script>
+
+{% endif %}
 
 {% endblock %}

@@ -1,73 +1,114 @@
 {% extends 'firstApp/main.html' %}
 {% load static %}
 
+<style>
+    body.modal-open::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        backdrop-filter: blur(5px);
+        z-index: 1040;
+        /* Less than modal's z-index (1050) */
+    }
+</style>
+
 {% block title %}contact - rite living spa{% endblock %}
 
 {% block content %}
 
-    <!-- CONTACT -->
-    <section id="contact" class="section-padding">
-        <div class="container">
-            <div class="row">
-                <div class="col-12 text-center">
-                    <div class="section-title">
+<!-- CONTACT -->
+<section id="contact" class="section-padding">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center">
+                <div class="section-title">
+                    <h1 class="display-4 text-white fw-semibold">Contact Us</h1>
+                    <div class="line bg-white"></div>
+                    <p class="text-white">A spa is a wellness center offering massages, facials, and relaxation
+                        treatments to promote health and well-being.</p>
+                </div>
+            </div>
+        </div>
 
-                        
-                        {% if messages %}
-                            {% for message in messages %}
-                                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                    <strong>Success!</strong> {{ message }}
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                </div>
-                            {% endfor %}
-                        {% endif %}
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <form method="post" class="row g-3 p-lg-5 p-4 bg-white theme-shadow">
+                    {% csrf_token %}
 
-
-                        <h1 class="display-4 text-white fw-semibold">Contact Us</h1>
-                        <div class="line bg-white"></div>
-                        <p class="text-white">A spa is a wellness center offering massages, facials, and relaxation treatments to promote health and well-being.</p>
+                    <div class="form-group col-lg-6">
+                        {{ form.first_name }}
                     </div>
-                </div>
-            </div>
-    
-            <div class="row justify-content-center">
-                <div class="col-lg-8">
-                    <form method="post" class="row g-3 p-lg-5 p-4 bg-white theme-shadow">
-                        {% csrf_token %}
-    
-                        <div class="form-group col-lg-6">
-                            {{ form.first_name }}
-                        </div>
-                        <div class="form-group col-lg-6">
-                            {{ form.last_name }}
-                        </div>
-                        <div class="form-group col-lg-12">
-                            {{ form.email }}
-                        </div>
-                        <div class="form-group col-lg-12">
-                            {{ form.subject }}
-                        </div>
-                        <div class="form-group col-lg-12">
-                            {{ form.message }}
-                        </div>
-    
-                        <div class="form-group col-lg-12 d-grid">
-                            <button type="submit" class="btn btn-brand">Send Message</button>
-                        </div>
-                    </form>
-                </div>
+                    <div class="form-group col-lg-6">
+                        {{ form.last_name }}
+                    </div>
+                    <div class="form-group col-lg-12">
+                        {{ form.email }}
+                    </div>
+                    <div class="form-group col-lg-12">
+                        {{ form.subject }}
+                    </div>
+                    <div class="form-group col-lg-12">
+                        {{ form.message }}
+                    </div>
+
+                    <div class="form-group col-lg-12 d-grid">
+                        <button type="submit" class="btn btn-brand">Send Message</button>
+                    </div>
+                </form>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- CALL TO ACTION -->
-    <section class="section-padding bg-success text-white text-center" data-aos="fade-down" data-aos-delay="50">
-        <div class="container">
-            <h2 class="mb-3">Ready to Treat Yourself?</h2>
-            <p class="mb-4">Book your appointment now and experience the transformation.</p>
-            <a href="{% url 'booksessionpage' %}" class="btn btn-light btn-lg rounded-pill">Book Now</a>
+<!-- CALL TO ACTION -->
+<section class="section-padding bg-success text-white text-center" data-aos="fade-down" data-aos-delay="50">
+    <div class="container">
+        <h2 class="mb-3">Ready to Treat Yourself?</h2>
+        <p class="mb-4">Book your appointment now and experience the transformation.</p>
+        <a href="{% url 'booksessionpage' %}" class="btn btn-light btn-lg rounded-pill">Book Now</a>
+    </div>
+</section>
+
+
+<!-- Success Modal -->
+<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg"> <!-- modal-lg makes it wider -->
+        <div class="modal-content border-0 rounded-4 shadow-lg">
+
+            <div class="modal-header bg-success text-white rounded-top-4">
+                <h4 class="modal-title fw-bold" id="successModalLabel">
+                    <i class="bi bi-check-circle-fill me-2"></i>Success!
+                </h4>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body fs-5 text-center py-4">
+                {% for message in messages %}
+                <p class="mb-2">{{ message }}</p>
+                {% endfor %}
+            </div>
+
+            <div class="modal-footer justify-content-center border-0 pb-4">
+                <button type="button" class="btn btn-outline-success px-4 rounded-pill"
+                    data-bs-dismiss="modal">Thank you!</button>
+            </div>
+
         </div>
-    </section>
+    </div>
+</div>
 
+
+{% if messages %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var successModal = new bootstrap.Modal(document.getElementById('successModal'));
+        successModal.show();
+    });
+</script>
+{% endif %}
 
 {% endblock %}

@@ -146,7 +146,7 @@ def CalenderPageView(request):
 
         if form.is_valid():
             form.save()  # Save the uniform data (either new or updated) to the database
-            print("Form saved successfully!")  # Debugging message after successful save
+            messages.success(request, "Uniform Saved successfully.")
         else:
             print("Form errors: ", form.errors)  # Debugging message to see any validation errors
     else:
@@ -189,8 +189,9 @@ def RecordservicePageView(request):
         form = ServiceRenderedForm(request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request, "Service recorded successfully.")
             form = ServiceRenderedForm()
+            messages.success(request, "Service recorded successfully.")
+            
         else:
             print(form.errors)
     else:
@@ -268,7 +269,8 @@ def ProductPage(request):
         form = ProductForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            return redirect('productspage')
+            form = ProductForm()
+            messages.success(request, "Product Added Successfully.")
     else:
         form = ProductForm()
 
@@ -389,7 +391,8 @@ def RecordexpensesPageView(request):
         form = ExpenseForm(request.POST)
         if form.is_valid():
             form.save()  # Save the form data to the database
-            form = ExpenseForm()  # Clear the form after saving
+            form = ExpenseForm()
+            messages.success(request, "Expense recorded successfully.")
     else:
         form = ExpenseForm()
 
@@ -588,6 +591,7 @@ def DashboardPageView(request):
     pending_bookings = SpaSessionBooking.objects.filter(status='pending').order_by('-created_at')[:5]
 
 
+
     # Pass all the data to the template
     context = {
         'user': user,
@@ -677,7 +681,7 @@ def BookPageView(request):
             booking.user = request.user
             booking.save()
             form = SpaSessionBookingForm()
-            return redirect('booksessionpage')
+            messages.success(request, "Your session has been successfully booked!")
     else:
         form = SpaSessionBookingForm()
 
@@ -719,7 +723,7 @@ def UpdateBookingStatus(request, booking_id):
         else:
             messages.error(request, "Please select a valid status.")
 
-    return redirect('booksessionpage')
+    return redirect('dashboardpage')
 
 
 
@@ -748,7 +752,8 @@ def UserReviewPageView(request):
             if request.user.is_authenticated:
                 review.user = request.user
             review.save()
-            return redirect('userreviewpage')
+            form = ReviewForm()
+            messages.success(request, "Thanks For the Review!")
         else:
             print(form.errors)  # DEBUG: Show form validation errors
     else:
