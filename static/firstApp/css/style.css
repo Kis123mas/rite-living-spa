@@ -103,7 +103,7 @@ img {
 
 /* HERO */
 #hero-section {
-    background: linear-gradient(rgba(var(--c-brand-rgb), 0.507), rgba(var(--c-brand-rgb), 0.438)), url('../images/heropicture.jpg');
+    background: linear-gradient(rgba(var(--c-brand-rgb), 0.707), rgba(var(--c-brand-rgb), 0.538)), url('../images/photo-1.jpg');
     background-position: center;
     background-size: cover;
 }
