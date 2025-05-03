@@ -103,7 +103,7 @@ img {
 
 /* HERO */
 #hero-section {
-    background: linear-gradient(rgba(var(--c-brand-rgb), 0.707), rgba(var(--c-brand-rgb), 0.538)), url('../images/photo-1.jpg');
+    background: linear-gradient(rgba(var(--c-brand-rgb), 0.707), rgba(var(--c-brand-rgb), 0.538)), url('../images/hero-img.jpg');
     background-position: center;
     background-size: cover;
 }
@@ -266,7 +266,7 @@ img {
     content: "";
     width: 100%;
     height: 70%;
-    background: linear-gradient(rgba(var(--c-brand-rgb), 0.8), rgba(var(--c-brand-rgb), 0.8)), url('../images/heropicture.jpg');
+    background: linear-gradient(rgba(var(--c-brand-rgb), 0.8), rgba(var(--c-brand-rgb), 0.8)), url('../images/about-11.jpg');
     background-position: center;
     background-size: cover;
     position: absolute;
@@ -397,3 +397,17 @@ footer .line {
     100% { transform: rotate(360deg); }
 }
 
+
+.map-container {
+    position: relative;
+    overflow: hidden;
+    border-radius: 15px; /* Rounded corners for a softer look */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* Subtle shadow for depth */
+    background-color: #fff; /* White background for contrast */
+    padding: 5px; /* Adds some space between the map and the container edges */
+  }
+  
+  .map-container iframe {
+    border-radius: 10px; /* Ensures iframe corners are rounded to match container */
+  }
+  
